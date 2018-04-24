@@ -5,7 +5,7 @@
 
 typedef struct node {
     int val;
-    array_list_t neighbors;
+    linked_list_t neighbors;
 } node_t;
 
 void node_init(node_t *n);
