@@ -4,6 +4,7 @@
  ***********************************************************************/
 
 #include "hash_table.h"
+#include "node.h"
 
 /* Hash table essentials */
 
@@ -11,13 +12,10 @@
 pre: none
 post: hash is either a hash table, or NULL (if space couldn't be created)
 */
-hashTable* initializeHashTable() {
-	hashTable* hash = malloc(sizeof(hashTable));
+hash_table* initialize_hash_table() {
+	hash_table* hash = malloc(sizeof(hash_table));
 	if (NULL != hash) {
-		int i;
-		for (i = 0; i < MAX_ARR_LENGTH; i++) {
-			hash->table[i] = NULL;
-		}
+		hash->table = { NULL };
 		return hash;
 	} else {
 		return NULL;
@@ -29,33 +27,20 @@ pre: hash is not NULL, word has null pointer
 post: word will either be added with frequency of 1, or have had its
 frequency incremented
 */
-void add(hashTable* hash, char word[MAX_STR]) {
-	wordNode* node = find(hash, word);
-	/* If we've already added the word, just incremement frequency */
-	if (NULL != node) {
-		(node->frequency)++;
-	} else {
-		/* Otherwise, make a new node */
-		wordNode* newNode = malloc(sizeof(wordNode));
-		if (NULL != newNode) {
-			strcpy(newNode->word, word);
-			newNode->frequency = 1;
-			newNode->next = NULL;
+void add(hash_table* hash, graph_node_t* graph_node) {
+	hash_node_t* new_node = (hash_node_t*) malloc(sizeof(hash_node));
+	if (NULL != new_node) {
+		new_node->graph_node = graph_node;
 
-			unsigned long index = hashFunction(word);
-			wordNode* cur = hash->table[index];
-			/* Collsion handling */
-			if (NULL != cur) {
-				while (NULL != cur->next) {
-					cur = cur->next;
-				}
-				cur->next = newNode;
-			} else {
-				hash->table[index] = newNode;
-			}
-		} else {
-			printf("Failed to make space for new node!\n");
-		}
+		unsigned long index = hash_function(graph_node->val);
+		hash_node_t* current = hash->table[index];
+
+		new_node->next = current;
+		hash->table[index] = new_node;
+
+	} else {
+		perror("Failed to malloc");
+		exit(2);
 	}
 }
 
@@ -63,42 +48,25 @@ void add(hashTable* hash, char word[MAX_STR]) {
 pre: hash is initialized
 post: if word was in hash, it has been removed. Otherwise, nothing changes
 */
-void delete(hashTable* hash, char word[MAX_STR]) {
-	unsigned long index = hashFunction(word);
-	wordNode* cur = hash->table[index];
+void delete(hash_table* hash, graph_node_t* graph_node) {
+	unsigned long index = hash_function(graph_node->val);
+	graph_node* current = hash->table[index];
 	
-	wordNode* prev = NULL;
-	while (NULL != cur) {
-		if (strcmp(cur->word, word) == 0) {
+	graph_node* previous = NULL;
+	while (NULL != current) {
+		if (graph_node == current->graph_node) {
 			/* First element? */
-			if (NULL == prev) {
-				hash->table[index] = cur->next;
+			if (NULL == previous) {
+				hash->table[index] = current->next;
 			} else {
-				prev->next = cur->next;
+				previous->next = current->next;
 			}
-			free(cur);
+			free(current);
 			return;
 		}
-		prev = cur;
-		cur = cur->next;
+		previous = current;
+		current = current->next;
 	}
-}
-
-/*
-pre: hash is initialized
-post: return wordNode containing word, or NULL if it doesn't exist
-*/
-wordNode* find(hashTable* hash, char word[MAX_STR]) {
-	unsigned long index = hashFunction(word);
-	wordNode* cur = hash->table[index];
-
-	while (NULL != cur) {
-		if (strcmp(cur->word, word) == 0) {
-			break;
-		}
-		cur = cur->next;
-	}
-	return cur;
 }
 
 /*
@@ -106,7 +74,7 @@ pre: none
 post: returns int specific to word
 citation: http://www.cse.yorku.ca/~oz/hash.html
 */
-unsigned long hashFunction(char word[MAX_STR]) {
+unsigned long hash_function(char word[MAX_STR]) {
 	unsigned long hash = 5381;
   
   int i;
