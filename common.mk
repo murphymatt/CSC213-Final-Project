@@ -6,8 +6,8 @@ CXX := clang++
 LIBS ?= pthread
 
 # Default flags
-CFLAGS   ?= -g --std=c11 -I $(ROOT)/graph
-CXXFLAGS ?= -g --std=c++11 -I $(ROOT)/graph
+CFLAGS   ?= -g --std=c11 -fPIC -I $(ROOT)/graph
+CXXFLAGS ?= -g --std=c++11 -fPIC -I $(ROOT)/graph
 LDFLAGS  += $(addprefix -l,$(LIBS))
 
 # Default source and object files
@@ -74,7 +74,7 @@ $(STATIC_LIB_TARGETS): $(OBJS)
 # Link binary targets
 $(OTHER_TARGETS): $(OBJS)
 	@echo $(LOG_PREFIX) Linking $@ $(LOG_SUFFIX)
-	@$(CXX) $(LDFLAGS) -o $@ $^
+	@$(CXX) -o $@ $^ $(LDFLAGS)
 
 # Include dependency rules for all objects
 -include $(OBJS:.o=.d)

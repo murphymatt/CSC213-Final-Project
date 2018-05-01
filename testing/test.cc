@@ -5,19 +5,19 @@
 
 
 TEST(GraphTest, BasicNodeTest) {
-	node_t* people_arr[10] = { NULL };
-	// node_t* class_arr[10] = { NULL };
+	graph_node_t* people_arr[10] = { NULL };
+	// graph_node_t* class_arr[10] = { NULL };
 
-	node_t* maddie = add_node('S', "Maddie Goldman");
-	node_t* henry = add_node('S', "Henry Fisher");
-	node_t* matt = add_node('S', "Matt Murphy");
+	graph_node_t* maddie = add_node('S', "Maddie Goldman");
+	graph_node_t* henry = add_node('S', "Henry Fisher");
+	graph_node_t* matt = add_node('S', "Matt Murphy");
 	people_arr[0] = maddie;
 	people_arr[1] = henry;
 	people_arr[2] = matt;
 
-	node_t* csc213 = add_node('C', "CSC213");
-	node_t* csc261 = add_node('C', "CSC261");
-	node_t* mus116 = add_node('C', "MUS116");
+	graph_node_t* csc213 = add_node('C', "CSC213");
+	graph_node_t* csc261 = add_node('C', "CSC261");
+	graph_node_t* mus116 = add_node('C', "MUS116");
 
 	for (int i = 0; i < 10; ++i) {
 		if (people_arr[i] == NULL)

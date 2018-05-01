@@ -12,6 +12,11 @@
 #include <ctype.h>
 #include "node.h"
 
+ // This makes the header file work for both C and C++
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define MAX_ARR_LENGTH 256
 
 typedef struct hash_node {
@@ -26,7 +31,16 @@ typedef struct hash_table {
 /* Hash table essentials */
 hash_table_t* initialize_hash_table();
 void add(hash_table_t* hash, graph_node_t* graph_node);
-void delete(hash_table_t* hash, graph_node_t* graph_node);
-unsigned long hash_function(char word[MAX_STR]);
+
+void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node);
+
+unsigned long hash_function(const char* word);
+
+
+// This makes the header file work for both C and C++
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif

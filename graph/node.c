@@ -2,8 +2,8 @@
 
 #include "node.h"
 
-node_t* add_node(char type, char* val) {
-    node_t* new_node = (node_t*) malloc(sizeof(node_t));
+graph_node_t* add_node(char type, const char* val) {
+    graph_node_t* new_node = (graph_node_t*) malloc(sizeof(graph_node_t));
     if (new_node != NULL) {
         new_node->type = type;
         new_node->val = val;
@@ -59,23 +59,13 @@ void delete_node(graph_node_t* sad_node) {
     }
 
     // Free all list nodes created on sad_node's behalf
-    list_node_t* current = sad_node->neighbors;
+    current = sad_node->neighbors;
     while (current != NULL) {
         list_node_t* temp = current;
-        current = curret->next;
+        current = current->next;
         free(temp);
     }
 
     // Free sad node :(
     free(sad_node);
 }
-
-
-
-
-
-
-
-
-
-

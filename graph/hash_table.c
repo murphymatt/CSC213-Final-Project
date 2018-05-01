@@ -48,7 +48,7 @@ void add(hash_table_t* hash, graph_node_t* graph_node) {
 pre: hash is initialized
 post: if word was in hash, it has been removed. Otherwise, nothing changes
 */
-void delete(hash_table_t* hash, graph_node_t* graph_node) {
+void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node) {
 	unsigned long index = hash_function(graph_node->val);
 	hash_node_t* current = hash->table[index];
 	
@@ -74,7 +74,7 @@ pre: none
 post: returns int specific to word
 citation: http://www.cse.yorku.ca/~oz/hash.html
 */
-unsigned long hash_function(char word[MAX_STR]) {
+unsigned long hash_function(const char* word) {
 	unsigned long hash = 5381;
   
   int i;
