@@ -14,7 +14,7 @@ node_t* add_node(char type, char* val) {
     }
 }
 
-void add_neighbor(node_t* node1, node_t* node2) {
+void add_neighbor(graph_node_t* node1, graph_node_t* node2) {
     list_node_t* node1_list = (list_node_t*) malloc(sizeof(list_node_t));
     list_node_t* node2_list = (list_node_t*) malloc(sizeof(list_node_t));
 
@@ -32,7 +32,7 @@ void add_neighbor(node_t* node1, node_t* node2) {
 }
 
 
-void delete_node(node_t* sad_node) {
+void delete_node(graph_node_t* sad_node) {
     list_node_t* current = sad_node->neighbors;
 
     // Free all list nodes pointing to sad_node
