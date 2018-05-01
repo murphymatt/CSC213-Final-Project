@@ -4,7 +4,7 @@
  ***********************************************************************/
 
 #include "hash_table.h"
-#include "node.h"
+#include "graph/node.h"
 
 /* Hash table essentials */
 
@@ -12,10 +12,10 @@
 pre: none
 post: hash is either a hash table, or NULL (if space couldn't be created)
 */
-hash_table* initialize_hash_table() {
-	hash_table* hash = malloc(sizeof(hash_table));
+hash_table_t* initialize_hash_table() {
+	hash_table_t* hash = malloc(sizeof(hash_table_t));
 	if (NULL != hash) {
-		hash->table = { NULL };
+		// hash->table = { NULL };
 		return hash;
 	} else {
 		return NULL;
@@ -27,8 +27,8 @@ pre: hash is not NULL, word has null pointer
 post: word will either be added with frequency of 1, or have had its
 frequency incremented
 */
-void add(hash_table* hash, graph_node_t* graph_node) {
-	hash_node_t* new_node = (hash_node_t*) malloc(sizeof(hash_node));
+void add(hash_table_t* hash, graph_node_t* graph_node) {
+	hash_node_t* new_node = (hash_node_t*) malloc(sizeof(hash_node_t));
 	if (NULL != new_node) {
 		new_node->graph_node = graph_node;
 
@@ -48,11 +48,11 @@ void add(hash_table* hash, graph_node_t* graph_node) {
 pre: hash is initialized
 post: if word was in hash, it has been removed. Otherwise, nothing changes
 */
-void delete(hash_table* hash, graph_node_t* graph_node) {
+void delete(hash_table_t* hash, graph_node_t* graph_node) {
 	unsigned long index = hash_function(graph_node->val);
-	graph_node* current = hash->table[index];
+	hash_node_t* current = hash->table[index];
 	
-	graph_node* previous = NULL;
+	hash_node_t* previous = NULL;
 	while (NULL != current) {
 		if (graph_node == current->graph_node) {
 			/* First element? */
