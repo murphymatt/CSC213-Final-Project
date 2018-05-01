@@ -20,14 +20,11 @@ CFLAGS = -ansi -g -Wall -std=gnu99
 
 all: map
 
-map: hash_table.o word_map.o
-	$(CC) $(LDFLAGS) -o map hash_table.o word_map.o
+map: hash_table.o
+	$(CC) $(LDFLAGS) -o map hash_table.o
 
 hash_table.o: hash_table.c hash_table.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c hash_table.c
-
-word_map.o: word_map.c hash_table.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c word_map.c
 
 #----------------------------------------------------------------------------
 # cleanup rules: To invoke this command, type "make clean".
