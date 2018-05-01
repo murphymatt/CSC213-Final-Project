@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "graph/node.h"
+#include "node.h"
 
 #define MAX_ARR_LENGTH 256
 

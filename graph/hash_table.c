@@ -4,7 +4,7 @@
  ***********************************************************************/
 
 #include "hash_table.h"
-#include "graph/node.h"
+#include "node.h"
 
 /* Hash table essentials */
 

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "../hash_table.h"
-#include "../graph/node.h"
+#include "hash_table.h"
+#include "node.h"
 
 
 TEST(GraphTest, BasicNodeTest) {
