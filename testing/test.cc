@@ -3,9 +3,11 @@
 #include "hash_table.h"
 #include "node.h"
 
+#define ARR_LEN 3
+
 
 TEST(GraphTest, BasicNodeTest) {
-	graph_node_t* people_arr[10] = { NULL };
+	graph_node_t* people_arr[ARR_LEN] = { NULL };
 	// graph_node_t* class_arr[10] = { NULL };
 
 	graph_node_t* maddie = add_node('S', "Maddie Goldman");
@@ -19,25 +21,24 @@ TEST(GraphTest, BasicNodeTest) {
 	graph_node_t* csc261 = add_node('C', "CSC261");
 	graph_node_t* mus116 = add_node('C', "MUS116");
 
-	for (int i = 0; i < 10; ++i) {
-		if (people_arr[i] == NULL)
-			break;
-		
+	for (int i = 0; i < ARR_LEN; ++i)		
 		add_neighbor(people_arr[i], csc213);
-	}
 
 	add_neighbor(maddie, csc261);
 	add_neighbor(henry, mus116);
 
-	printf("%s\n", maddie->neighbors->graph_node->val);
-	ASSERT_EQ(maddie->neighbors->graph_node, csc213);
-	printf("%s\n", maddie->neighbors->next->graph_node->val);
+	ASSERT_EQ(maddie->neighbors->graph_node, csc261);
 	ASSERT_EQ(maddie->neighbors->next->graph_node, csc213);
 
-	printf("%s\n", henry->neighbors->graph_node->val);
-	ASSERT_EQ(henry->neighbors->graph_node, csc213);
-	printf("%s\n", henry->neighbors->next->graph_node->val);
-	ASSERT_EQ(henry->neighbors->next->graph_node, mus116);
+	ASSERT_EQ(henry->neighbors->graph_node, mus116);
+	ASSERT_EQ(henry->neighbors->next->graph_node, csc213);
 
-	// Delete after
+	list_node_t* current_neighbor = csc213->neighbors; 
+	for (int i = 0; i < ARR_LEN; ++i)	{
+		ASSERT_EQ(current_neighbor->graph_node, people_arr[ARR_LEN - 1 - i]);
+		current_neighbor = current_neighbor->next;
+	}
+
+	delete_node(graph_node_t* maddie);
+	
 }
