@@ -5,7 +5,7 @@
 #define MAX_STR 64
 
 typedef struct graph_node {
-    char type;
+    char type; // S or C
     char val[MAX_STR];
     list_node_t* neighbors;
 } graph_node_t;
