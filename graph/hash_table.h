@@ -28,13 +28,17 @@ typedef struct hash_table {
 } hash_table_t;
 
 /* Hash table essentials */
-hash_table_t* initialize_hash_table();
+void initialize_hash_table(hash_table_t* hash_table);
 
 void add(hash_table_t* hash, graph_node_t* graph_node);
 
 void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node);
 
 graph_node_t* search_table(hash_table_t* hash, char type, const char* val);
+
+hash_table_t* dfs(graph_node_t* start, int dist);
+
+void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist);
 
 unsigned long hash_function(const char* word);
 
