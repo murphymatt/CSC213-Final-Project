@@ -4,7 +4,6 @@
  ***********************************************************************/
 
 #include "hash_table.h"
-#include "node.h"
 
 #define MAX_ARR_LENGTH 256
 
@@ -80,9 +79,11 @@ graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
   unsigned long hash = hash_function(val);
   graph_node_t* search_node = add_node(type, val);
   hash_node_t* node = h_table->table[hash];
-  while (node != NULL && 
-         !compare_node(search_node, node->graph_node))
-    node = node->next;
+  while (node != NULL) {
+  	if (!compare_node(search_node, node->graph_node))
+  		node = node->next;
+  }
+
   return node != NULL ? node->graph_node : NULL;
 }
 

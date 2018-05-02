@@ -151,6 +151,25 @@ TEST(GraphTest, NodeDeleteTest) {
 
 }
 
-TEST(GraphTest, NodeDeleteTest) {
+TEST(GraphTest, HashBasicAddTest) {
+	hash_table_t* ht = initialize_hash_table();
+
+	graph_node_t* maddie = add_node('S', "Maddie Goldman");
+	graph_node_t* henry = add_node('S', "Henry Fisher");
+	graph_node_t* matt = add_node('S', "Matt Murphy");
+
+	graph_node_t* csc213 = add_node('C', "CSC213");
+
+	add(ht, maddie);
+	add(ht, henry);
+	add(ht, matt);
+
+	graph_node_t* new_maddie = search_table(ht, 'S', "Maddie Goldman");
+	graph_node_t* new_henry = search_table(ht, 'S', "Henry Fisher");
+	graph_node_t* new_matt = search_table(ht, 'S', "Matt Murphy");
 	
+	// ASSERT_EQ(maddie, new_maddie);
+	// ASSERT_EQ(henry, new_henry);
+	// ASSERT_EQ(matt, new_matt);
+
 }
