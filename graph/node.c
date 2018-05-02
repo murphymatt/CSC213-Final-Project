@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "node.h"
 
@@ -12,6 +13,10 @@ graph_node_t* add_node(char type, const char* val) {
     } else {
         return NULL;
     }
+}
+
+bool compare_node(graph_node_t* node1, graph_node_t* node2) {
+    return node1->type == node2->type && !strcmp(node1->val, node2->val);
 }
 
 void add_neighbor(graph_node_t* node1, graph_node_t* node2) {

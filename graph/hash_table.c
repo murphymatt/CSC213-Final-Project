@@ -6,6 +6,8 @@
 #include "hash_table.h"
 #include "node.h"
 
+#define MAX_ARR_LENGTH 256
+
 /* Hash table essentials */
 
 /*
@@ -15,7 +17,8 @@ post: hash is either a hash table, or NULL (if space couldn't be created)
 hash_table_t* initialize_hash_table() {
 	hash_table_t* hash = malloc(sizeof(hash_table_t));
 	if (NULL != hash) {
-		// hash->table = { NULL };
+    hash_node_t* table[MAX_ARR_LENGTH] = { NULL };
+		hash->table = table; 
 		return hash;
 	} else {
 		return NULL;
@@ -67,6 +70,20 @@ void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node) {
 		previous = current;
 		current = current->next;
 	}
+}
+
+/*
+ * pre: h_table is initialized, val is not null
+ * post: returns node if node exists, else returns NULL
+ */
+graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
+  unsigned long hash = hash_function(val);
+  graph_node_t* search_node = add_node(type, val);
+  hash_node_t* node = h_table->table[hash];
+  while (node != NULL && 
+         !compare_node(search_node, node->graph_node))
+    node = node->next;
+  return node != NULL ? node->graph_node : NULL;
 }
 
 /*

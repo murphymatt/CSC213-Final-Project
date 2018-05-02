@@ -17,7 +17,6 @@
 extern "C" {
 #endif
 
-#define MAX_ARR_LENGTH 256
 
 typedef struct hash_node {
     graph_node_t* graph_node;
@@ -25,17 +24,19 @@ typedef struct hash_node {
 } hash_node_t;
 
 typedef struct hash_table {
-  hash_node_t* table[MAX_ARR_LENGTH];
+  hash_node_t** table;
 } hash_table_t;
 
 /* Hash table essentials */
 hash_table_t* initialize_hash_table();
+
 void add(hash_table_t* hash, graph_node_t* graph_node);
 
 void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node);
 
-unsigned long hash_function(const char* word);
+graph_node_t* search_table(hash_table_t* hash, char type, const char* val);
 
+unsigned long hash_function(const char* word);
 
 // This makes the header file work for both C and C++
 #ifdef __cplusplus
