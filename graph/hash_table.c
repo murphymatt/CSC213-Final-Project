@@ -16,8 +16,7 @@ post: hash is either a hash table, or NULL (if space couldn't be created)
 */
 void initialize_hash_table(hash_table_t* hash_table) {
   hash_node_t* table[MAX_ARR_LENGTH] = { NULL };
-  hash->table = table; 
-  return hash;
+  hash_table->table = table; 
 }
 
 /* 
@@ -113,9 +112,9 @@ hash_table_t* dfs(graph_node_t* start, int dist) {
 void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
   if (dist < 0) return;
 
-  graph_node_t* node = start->neighbors;
+  list_node_t* node = start->neighbors;
   while (node != NULL) {
-    g_node = node->graph_node;
+    graph_node_t* g_node = node->graph_node;
     // node is already contained in search list... skip this
     if (search_table(ret_table, g_node->type, g_node->val) != NULL) continue;
     add(ret_table, g_node);
