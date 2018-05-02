@@ -74,3 +74,7 @@ void delete_node(graph_node_t* sad_node) {
     // Free sad node :(
     free(sad_node);
 }
+
+void breadth_first_search(list_node_t* lst, graph_node_t* node, int dist) {
+    
+}

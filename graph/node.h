@@ -32,7 +32,7 @@ void add_neighbor(graph_node_t* node1, graph_node_t* node2);
 
 void delete_node(graph_node_t* sad_node);
 
-graph_node_t* search_node(graph_node_t* node);
+graph_node_t* breadth_first_search(graph_node_t* node);
 
 // This makes the header file work for both C and C++
 #ifdef __cplusplus
