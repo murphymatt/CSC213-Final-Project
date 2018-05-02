@@ -152,7 +152,8 @@ TEST(GraphTest, NodeDeleteTest) {
 }
 
 TEST(GraphTest, HashBasicAddTest) {
-	hash_table_t* ht = initialize_hash_table();
+	hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
+	initialize_hash_table(ht);
 
 	graph_node_t* maddie = add_node('S', "Maddie Goldman");
 	graph_node_t* henry = add_node('S', "Henry Fisher");
