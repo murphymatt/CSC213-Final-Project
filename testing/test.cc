@@ -39,6 +39,9 @@ TEST(GraphTest, BasicNodeTest) {
 		current_neighbor = current_neighbor->next;
 	}
 
-	delete_node(graph_node_t* maddie);
+	// delete_node(maddie);
+	// ASSERT_EQ(csc213->neighbors->graph_node, matt);
+	// ASSERT_EQ(csc213->neighbors->next->graph_node, henry);
+	// ASSERT_EQ(csc213->neighbors->next->next, NULL);
 	
 }
