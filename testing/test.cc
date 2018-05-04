@@ -159,8 +159,6 @@ TEST(GraphTest, HashBasicAddTest) {
 	graph_node_t* henry = add_node('S', "Henry Fisher");
 	graph_node_t* matt = add_node('S', "Matt Murphy");
 
-	graph_node_t* csc213 = add_node('C', "CSC213");
-
 	add(ht, maddie);
 	add(ht, henry);
 	add(ht, matt);
@@ -249,4 +247,45 @@ TEST(GraphTest, DFSTest) {
     ASSERT_EQ(new_cameron, cameron);
     ASSERT_EQ(new_abyaya,  abyaya);
     ASSERT_EQ(new_cara,    cara);
+}
+
+TEST(GraphTest, HashAddCollisionTest) {
+	hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
+	initialize_hash_table(ht);
+
+	graph_node_t* maddie = add_node('S', "Maddie Goldman");
+	graph_node_t* maddie2 = add_node('C', "Maddie Goldman");
+
+	ASSERT_NE(maddie, maddie2);
+
+	add(ht, maddie);
+	add(ht, maddie2);
+
+	graph_node_t* new_maddie = search_table(ht, 'S', "Maddie Goldman");
+	graph_node_t* new_maddie2 = search_table(ht, 'C', "Maddie Goldman");
+	
+	ASSERT_EQ(maddie, new_maddie);
+	ASSERT_EQ(maddie2, new_maddie2);
+}
+
+TEST(GraphTest, HashDeleteTest) {
+	hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
+	initialize_hash_table(ht);
+
+	graph_node_t* maddie = add_node('S', "Maddie Goldman");
+	graph_node_t* maddie2 = add_node('C', "Maddie Goldman");
+
+	add(ht, maddie);
+	add(ht, maddie2);
+
+	graph_node_t* new_maddie = search_table(ht, 'S', "Maddie Goldman");
+	graph_node_t* new_maddie2 = search_table(ht, 'C', "Maddie Goldman");
+
+	ASSERT_EQ(maddie, new_maddie);
+	ASSERT_EQ(maddie2, new_maddie2);
+
+	delete_hash_node(ht, maddie);
+	graph_node_t* new_new_maddie2 = search_table(ht, 'C', "Maddie Goldman");
+	
+	ASSERT_EQ(maddie2, new_new_maddie2);
 }
