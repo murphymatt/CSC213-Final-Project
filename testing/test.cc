@@ -239,6 +239,7 @@ TEST(GraphTest, DFSTest) {
     add(&ht, csc301);
 
     hash_table_t *dfs_table = dfs(csc261, 1);
+    // ensure resulting neighbors are within returned hash table
     graph_node_t* new_maddie  = search_table(dfs_table, 'S', "Maddie Goldman");
     graph_node_t* new_cameron = search_table(dfs_table, 'S', "Cameron Chen");
     graph_node_t* new_abyaya  = search_table(dfs_table, 'S', "Abyaya Lamsal");
@@ -247,6 +248,10 @@ TEST(GraphTest, DFSTest) {
     ASSERT_EQ(new_cameron, cameron);
     ASSERT_EQ(new_abyaya,  abyaya);
     ASSERT_EQ(new_cara,    cara);
+    
+    // ensure no other nodes are within the returned hash table
+    graph_node_t* no_matt = search_table(dfs_table, 'S', "Matt Murphy");
+    ASSERT_TRUE(no_matt == NULL);
 }
 
 TEST(GraphTest, HashAddCollisionTest) {
