@@ -14,7 +14,9 @@ pre: none
 post: hash is either a hash table, or NULL (if space couldn't be created)
 */
 void initialize_hash_table(hash_table_t* hash_table) {
-  hash_node_t* table[MAX_ARR_LENGTH] = { NULL };
+  hash_node_t** table = malloc(sizeof(hash_node_t) * MAX_ARR_LENGTH);
+  for (int i = 0; i < MAX_ARR_LENGTH; i++)
+    table[i] = NULL;
   hash_table->table = table; 
 }
 
@@ -76,7 +78,10 @@ graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
   while (node != NULL) {
   	if (!compare_node(search_node, node->graph_node))
   		node = node->next;
+    else
+      break;
   }
+  free(search_node);
   return node != NULL ? node->graph_node : NULL;
 }
 
