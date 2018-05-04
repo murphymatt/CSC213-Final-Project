@@ -113,7 +113,7 @@ hash_table_t* dfs(graph_node_t* start, int dist) {
  * post: ret_table contains all nodes in graph within distance from start
  */
 void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
-  if (dist < 0) return;
+  if (dist <= 0) return;
 
   list_node_t* node = start->neighbors;
   while (node != NULL) {
@@ -122,5 +122,6 @@ void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
     if (search_table(ret_table, g_node->type, g_node->val) != NULL) continue;
     add(ret_table, g_node);
     _dfs_helper(ret_table, g_node, dist-1);
+    node = node->next;
   }
 }
