@@ -5,8 +5,6 @@
 
 #include "hash_table.h"
 
-#define MAX_ARR_LENGTH 256
-
 /* Hash table essentials */
 
 /*

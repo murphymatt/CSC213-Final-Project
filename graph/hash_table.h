@@ -12,6 +12,8 @@
 #include <ctype.h>
 #include "node.h"
 
+#define MAX_ARR_LENGTH 256
+
  // This makes the header file work for both C and C++
 #ifdef __cplusplus
 extern "C" {
