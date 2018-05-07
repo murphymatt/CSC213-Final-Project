@@ -1,5 +1,5 @@
 ROOT = ..
-TARGETS = graph_test
+TARGETS += graph_test
 PREREQS = $(ROOT)/deps/gtest
 
 LDFLAGS = -L$(ROOT)/graph

@@ -9,6 +9,9 @@
 #include "hash_table.h"
 
 void write_to_file(hash_table_t *h_table, const char *file_path);
-// hash_table_t* read_from_file(const char *file_path);
+
+hash_table_t* read_from_file(const char *file_path);
+
+void print_prompt();
 
 #endif

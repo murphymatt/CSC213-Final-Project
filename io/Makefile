@@ -1,5 +1,5 @@
 ROOT = ..
-TARGETS = main
+TARGETS += main
 
 LDFLAGS = -L$(ROOT)/graph
 LIBS = graph pthread
