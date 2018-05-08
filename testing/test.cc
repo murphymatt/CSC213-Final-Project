@@ -238,7 +238,8 @@ TEST(GraphTest, BFSTest) {
     add(&ht, mus116);
     add(&ht, csc301);
 
-    hash_table_t *bfs_table = bfs(csc261, 1);
+    int num_threads = 4;
+    hash_table_t *bfs_table = bfs(csc261, 1, num_threads);
     // ensure resulting neighbors are within returned hash table
     graph_node_t* new_maddie  = search_table(bfs_table, 'S', "Maddie Goldman");
     graph_node_t* new_cameron = search_table(bfs_table, 'S', "Cameron Chen");
