@@ -5,9 +5,11 @@
 
 graph_node_t* add_node(char type, const char* val) {
   graph_node_t* new_node = (graph_node_t*) malloc(sizeof(graph_node_t));
-  if (new_node != NULL) {
+  char* malloc_val =  (char*) malloc(sizeof(char) * MAX_STR);
+  if (new_node != NULL && malloc_val != NULL) {
     new_node->type = type;
-    new_node->val = val;
+    strcpy(malloc_val, val);
+    new_node->val = malloc_val;
     new_node->neighbors = NULL;
     new_node->flag = 0;
     new_node->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
