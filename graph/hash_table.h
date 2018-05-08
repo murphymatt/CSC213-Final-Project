@@ -42,6 +42,8 @@ graph_node_t* search_table(hash_table_t* hash, char type, const char* val);
 
 hash_table_t* bfs(graph_node_t* start, int dist);
 
+void set_flags(hash_table_t* ht, int n);
+
 void _bfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist);
 
 unsigned long hash_function(const char* word);

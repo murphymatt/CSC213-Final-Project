@@ -9,6 +9,7 @@ graph_node_t* add_node(char type, const char* val) {
     new_node->type = type;
     new_node->val = val;
     new_node->neighbors = NULL;
+    new_node->flag = 0;
     new_node->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
     return new_node;
   } else {
