@@ -1,4 +1,4 @@
 ROOT = .
 PREREQS = $(ROOT)/deps/gtest
-DIRS = testing
+DIRS = testing graph io
 include $(ROOT)/common.mk

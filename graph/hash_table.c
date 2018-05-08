@@ -5,8 +5,6 @@
 
 #include "hash_table.h"
 
-#define MAX_ARR_LENGTH 256
-
 /* Hash table essentials */
 
 /*
@@ -14,7 +12,9 @@ pre: none
 post: hash is either a hash table, or NULL (if space couldn't be created)
 */
 void initialize_hash_table(hash_table_t* hash_table) {
-  hash_node_t* table[MAX_ARR_LENGTH] = { NULL };
+  hash_node_t** table = malloc(sizeof(hash_node_t) * MAX_ARR_LENGTH);
+  for (int i = 0; i < MAX_ARR_LENGTH; i++)
+    table[i] = NULL;
   hash_table->table = table; 
 }
 
@@ -76,6 +76,8 @@ graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
   while (node != NULL) {
   	if (!_compare_node(search_node, node->graph_node))
   		node = node->next;
+    else
+      break;
   }
   free(search_node);
   return node != NULL ? node->graph_node : NULL;
@@ -111,7 +113,7 @@ hash_table_t* dfs(graph_node_t* start, int dist) {
  * post: ret_table contains all nodes in graph within distance from start
  */
 void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
-  if (dist < 0) return;
+  if (dist <= 0) return;
 
   list_node_t* node = start->neighbors;
   while (node != NULL) {
@@ -120,5 +122,6 @@ void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
     if (search_table(ret_table, g_node->type, g_node->val) != NULL) continue;
     add(ret_table, g_node);
     _dfs_helper(ret_table, g_node, dist-1);
+    node = node->next;
   }
 }

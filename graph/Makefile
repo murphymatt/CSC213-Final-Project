@@ -1,5 +1,5 @@
 ROOT = ..
-TARGETS = libgraph.a
+TARGETS += libgraph.a
 PREREQS = $(ROOT)/deps/gtest
 
 include $(ROOT)/common.mk
