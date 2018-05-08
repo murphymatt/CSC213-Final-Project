@@ -74,9 +74,10 @@ graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
   graph_node_t* search_node = add_node(type, val);
   hash_node_t* node = h_table->table[hash];
   while (node != NULL) {
-  	if (!compare_node(search_node, node->graph_node))
+  	if (!_compare_node(search_node, node->graph_node))
   		node = node->next;
   }
+  free(search_node);
   return node != NULL ? node->graph_node : NULL;
 }
 
