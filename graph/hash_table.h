@@ -19,10 +19,12 @@
 extern "C" {
 #endif
 
+#include <pthread.h>
 
 typedef struct hash_node {
-    graph_node_t* graph_node;
-    struct hash_node* next;
+  graph_node_t* graph_node;
+  struct hash_node* next;
+  pthread_mutex_t m;
 } hash_node_t;
 
 typedef struct hash_table {

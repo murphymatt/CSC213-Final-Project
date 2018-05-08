@@ -31,6 +31,7 @@ void add(hash_table_t* hash, graph_node_t* graph_node) {
   hash_node_t* new_node = (hash_node_t*) malloc(sizeof(hash_node_t));
   if (NULL != new_node) {
     new_node->graph_node = graph_node;
+    new_node->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 
     unsigned long index = hash_function(graph_node->val);
     hash_node_t* current = hash->table[index];
@@ -77,11 +78,8 @@ graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
   unsigned long hash = hash_function(val);
   graph_node_t* search_node = add_node(type, val);
   hash_node_t* node = h_table->table[hash];
-  while (node != NULL) {
-  	if (!compare_node(search_node, node->graph_node))
-  		node = node->next;
-    else
-      break;
+  while (node != NULL && !_compare_node(search_node, node->graph_node)) {
+  	node = node->next;
   }
   free(search_node);
   return node != NULL ? node->graph_node : NULL;
@@ -105,11 +103,9 @@ citation: http://www.cse.yorku.ca/~oz/hash.html
 */
 unsigned long hash_function(const char* word) {
   unsigned long hash = 5381;
-
   int i;
   for (i = 0; i < MAX_STR; i++) {
-    if (0 == word[i])
-      break;
+    if (0 == word[i]) break;
     hash = ((hash << 5) + hash) + (word[i]);
   }
   hash = hash % MAX_ARR_LENGTH;

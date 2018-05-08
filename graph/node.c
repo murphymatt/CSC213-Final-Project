@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -6,26 +5,25 @@
 
 graph_node_t* add_node(char type, const char* val) {
   graph_node_t* new_node = (graph_node_t*) malloc(sizeof(graph_node_t));
-  char* malloc_val = (char*) malloc(sizeof(char) * MAX_STR);
-
-  if (new_node != NULL && malloc_val != NULL) {
-    strcpy(malloc_val, val);
+  if (new_node != NULL) {
     new_node->type = type;
-    new_node->val = malloc_val;
+    new_node->val = val;
     new_node->neighbors = NULL;
     new_node->flag = 0;
+    new_node->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
     return new_node;
   } else {
-    perror("Malloc failed");
-    exit(2);
+    return NULL;
   }
 }
 
-bool compare_node(graph_node_t* node1, graph_node_t* node2) {
+bool _compare_node(graph_node_t* node1, graph_node_t* node2) {
   return node1->type == node2->type && !strcmp(node1->val, node2->val);
 }
 
 void add_neighbor(graph_node_t* node1, graph_node_t* node2) {
+  pthread_mutex_lock(&node1->m);
+  pthread_mutex_lock(&node2->m);
   list_node_t* node1_list = (list_node_t*) malloc(sizeof(list_node_t));
   list_node_t* node2_list = (list_node_t*) malloc(sizeof(list_node_t));
 
@@ -40,16 +38,23 @@ void add_neighbor(graph_node_t* node1, graph_node_t* node2) {
     node2_list->next = node1->neighbors;
     node1->neighbors = node2_list;
   }
+  pthread_mutex_unlock(&node1->m);
+  pthread_mutex_unlock(&node2->m);
 }
 
 
 void delete_node(graph_node_t* sad_node) {
+  pthread_mutex_lock(&sad_node->m);
+  if (sad_node == NULL) {
+    pthread_mutex_unlock(&sad_node->m);
+    return;
+  }
+  
   list_node_t* current = sad_node->neighbors;
 
   // Free all list nodes pointing to sad_node
   while (current != NULL) {
     graph_node_t* current_graph = current->graph_node;
-
     list_node_t* current_neighbor = current_graph->neighbors;
     list_node_t* previous = NULL;
     while (current_neighbor != NULL) {
@@ -65,7 +70,6 @@ void delete_node(graph_node_t* sad_node) {
       previous = current_neighbor;
       current_neighbor = current_neighbor->next;
     }
-
     current = current->next;
   }
 
@@ -78,5 +82,6 @@ void delete_node(graph_node_t* sad_node) {
   }
 
   // Free sad node :(
+  pthread_mutex_unlock(&sad_node->m);
   free(sad_node);
 }
