@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -6,18 +5,14 @@
 
 graph_node_t* add_node(char type, const char* val) {
   graph_node_t* new_node = (graph_node_t*) malloc(sizeof(graph_node_t));
-  char* malloc_val = (char*) malloc(sizeof(char) * MAX_STR);
-
-  if (new_node != NULL && malloc_val != NULL) {
-    strcpy(malloc_val, val);
+  if (new_node != NULL) {
     new_node->type = type;
-    new_node->val = malloc_val;
+    new_node->val = val;
     new_node->neighbors = NULL;
     new_node->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
     return new_node;
   } else {
-    perror("Malloc failed");
-    exit(2);
+    return NULL;
   }
 }
 
