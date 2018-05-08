@@ -4,6 +4,7 @@
  ***********************************************************************/
 
 #include "hash_table.h"
+#include "queue.h"
 
 /* Hash table essentials */
 
@@ -97,10 +98,13 @@ unsigned long hash_function(const char* word) {
   return hash;
 }
 
-hash_table_t* dfs(graph_node_t* start, int dist) {
+hash_table_t* bfs(graph_node_t* start, int dist) {
   hash_table_t* ret_table = malloc(sizeof(hash_table_t));
   initialize_hash_table(ret_table);
-  _dfs_helper(ret_table, start, dist);
+  // create shared node queue to store nodes accessed by threads
+  node_queue_t *queue = (node_queue_t*) malloc(sizeof(node_queue_t));
+  init_node_queue(queue);
+  _bfs_helper(ret_table, start, dist);
   return ret_table;
 }
 
@@ -108,7 +112,7 @@ hash_table_t* dfs(graph_node_t* start, int dist) {
  * pre: ret_table starts empty at beginning of search
  * post: ret_table contains all nodes in graph within distance from start
  */
-void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
+void _bfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
   if (dist <= 0) return;
 
   list_node_t* node = start->neighbors;
@@ -117,7 +121,7 @@ void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
     // node is already contained in search list... skip this
     if (search_table(ret_table, g_node->type, g_node->val) != NULL) continue;
     add(ret_table, g_node);
-    _dfs_helper(ret_table, g_node, dist-1);
+    _bfs_helper(ret_table, g_node, dist-1);
     node = node->next;
   }
 }
