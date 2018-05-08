@@ -72,7 +72,6 @@ hash_table_t* read_from_file(const char *file_path) {
         char node1_type;
         char node1_name[MAX_STR];
         int ret = get_next_name(fp, node1_name, &node1_type);
-        printf("ret: %d\n", ret);
         if (ret == EOF)
             break;
         printf("%c, %s\n", node1_type, node1_name);
@@ -86,7 +85,6 @@ hash_table_t* read_from_file(const char *file_path) {
             char node2_type;
             char node2_name[MAX_STR];
             int ret = get_next_name(fp, node2_name, &node2_type);
-            printf("ret: %d\n", ret);
             if (ret == EOF || ret == '\n')
                 break;
             printf("%c, %s\n", node2_type, node2_name);
@@ -124,44 +122,8 @@ int get_next_name(FILE* fp, char name[MAX_STR], char* c) {
 }
 
 int main() {
-    // while (true) {
-    //     print_prompt();
-    // }
-    // graph_node_t* maddie = add_node('S', "Maddie Goldman");
-    // graph_node_t* henry = add_node('S', "Henry Fisher");
-    // graph_node_t* matt = add_node('S', "Matt Murphy");
-    // graph_node_t* csc213 = add_node('C', "CSC213");
-    // graph_node_t* csc321 = add_node('C', "CSC321");
 
-    // add_neighbor(maddie, csc213);
-    // add_neighbor(henry, csc213);
-    // add_neighbor(matt, csc213);
-
-    // add_neighbor(matt, csc321);
-    // add_neighbor(henry, csc321);
-
-    // hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
-    // initialize_hash_table(ht);
-
-    // add(ht, maddie);
-    // add(ht, henry);
-    // add(ht, matt);
-    // add(ht, csc213);
-    // add(ht, csc321);
-
-    char* path = "/Users/henryfisher/grinnell/213/CSC213-Final-Project/io/file.txt";
-
-    // write_to_file(ht, path);
-    hash_table_t* ht = read_from_file(path);
-
-    hash_node_t* current;
-    for (int i = 0; i < MAX_ARR_LENGTH; i++) {
-        current = ht->table[i];
-        while (current != NULL) {
-            printf("%c, %s\n", current->graph_node->type, current->graph_node->val);
-            current = current->next;
-        }
-    }
+    return 0;
     
 }
 
