@@ -153,3 +153,8 @@ hash_table_t* bfs(graph_node_t* start, int dist, int num_threads) {
    
   return ret_table;
 }
+
+void* bfs_pthread_fn(void* args) {
+  bfs_pthread_args* bfs_args = (bfs_pthread_args*) args;
+  return NULL;
+}

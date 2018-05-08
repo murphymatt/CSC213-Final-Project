@@ -31,6 +31,11 @@ typedef struct hash_table {
   hash_node_t** table;
 } hash_table_t;
 
+typedef struct bfs_pthread_args {
+  queue_t* queue;
+  hash_table_t* ret_table;
+} bfs_pthread_args_t;
+
 /* Hash table essentials */
 void initialize_hash_table(hash_table_t* hash_table);
 
@@ -41,6 +46,8 @@ void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node);
 graph_node_t* search_table(hash_table_t* hash, char type, const char* val);
 
 hash_table_t* bfs(graph_node_t* start, int dist, int num_threads);
+
+void* bfs_pthread_fn(void* args);
 
 void set_flags(hash_table_t* ht, int n);
 
