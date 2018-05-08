@@ -6,6 +6,8 @@
  * subsequent: Type, Value: Type2, Value2; Type3, Value3 
  *    where Value has an edge with Value2, and Value3
  */
+
+
 void write_to_file(hash_table_t *ht, const char *file_path) {
     FILE *fp = fopen(file_path, "w");
     if (fp == NULL) {
@@ -114,7 +116,7 @@ int get_next_name(FILE* fp, char name[MAX_STR], char* c) {
 
 int main() {
     // while (true) {
-    //     print_prompt();
+    //     get_user_input();
     // }
     // graph_node_t* maddie = add_node('S', "Maddie Goldman");
     // graph_node_t* henry = add_node('S', "Henry Fisher");
@@ -138,7 +140,7 @@ int main() {
     // add(ht, csc213);
     // add(ht, csc321);
 
-    char* path = "/Users/henryfisher/grinnell/213/CSC213-Final-Project/io/file.txt";
+    /*char* path = "/Users/henryfisher/grinnell/213/CSC213-Final-Project/io/file.txt";
 
     // write_to_file(ht, path);
     hash_table_t* ht = read_from_file(path);
@@ -150,16 +152,81 @@ int main() {
             printf("%c, %s\n", current->graph_node->type, current->graph_node->val);
             current = current->next;
         }
-    }
+        }*/
+
+  hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
+  initialize_hash_table(ht);
+
+  get_user_input(ht);
+
+  //write_to_file(ht, path); 
+
+  
     
 }
 
-void print_prompt() {
-    printf("1......Create a new entry\n");
-    printf("2......Delete an entry\n");
-    printf("3......List all entries\n");
+void get_user_input(hash_table_t* ht) {
+        
+  char action;
+  char node_type;
+  char student_name[MAX_STR];
+  char class_name[MAX_STR]; 
+  graph_node_t* new_student;
+  graph_node_t* new_class;
+  graph_node_t* delete_node; 
+  int done = 0;
+  int exit = 0; 
+
+  while(!exit) {
+    printf("Actions:\n"); 
+    printf("S......Add a student\n");
+    printf("C......Add a class\n"); 
+    printf("D......Delete an entry\n");
+    printf("L......List all entries\n");
+    printf("Q......quit\n"); 
     // add more
-    printf("Enter your choice: \n");
+
+  
+    printf("Enter your choice: ");
+    action = getchar();
+    printf("%d\n", action);
+
+    switch(action) {
+    case 'S':
+      printf("Enter the student name:");
+      scanf("%s", student_name);
+
+      new_student = add_node('S', student_name);
+      while(!done) {
+        printf("Add classes (q when done): ");
+        scanf("%s", class_name);
+        if(strcmp(class_name, "q") == 0) {
+          done = 1;
+          char nothing = getchar();
+          continue;
+        }//end if
+        new_class = add_node('C', class_name);
+        add_neighbor(new_student, new_class); 
+      }//end while
+                  
+      add(ht, new_student);//add node to hash
+      continue; 
+
+    case 'D':
+      printf("Enter name to delete: ");
+      scanf("%s", student_name);
+      delete_node = search_table(ht, 'S', student_name);
+      delete_node(delete_node); 
+      break;
+    case 'Q':
+      printf("Bye!\n");
+      exit = 1;
+      break;
+      
+    }//end switch
+ 
+
+  }//end while
 }
 
 
