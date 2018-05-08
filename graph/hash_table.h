@@ -40,7 +40,7 @@ void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node);
 
 graph_node_t* search_table(hash_table_t* hash, char type, const char* val);
 
-hash_table_t* bfs(graph_node_t* start, int dist);
+hash_table_t* bfs(graph_node_t* start, int dist, int num_threads);
 
 void set_flags(hash_table_t* ht, int n);
 

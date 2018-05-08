@@ -113,13 +113,46 @@ unsigned long hash_function(const char* word) {
   return hash;
 }
 
-hash_table_t* bfs(graph_node_t* start, int dist) {
+hash_table_t* bfs(graph_node_t* start, int dist, int num_threads) {
   hash_table_t* ret_table = malloc(sizeof(hash_table_t));
   initialize_hash_table(ret_table);
+  if (dist == 0) {
+    add(ret_table, start);
+    return ret_table;
+  }
+
+  num_threads=4;
+  pthread_t threads[num_threads];
+
+  // _bfs_helper(ret_table, start, dist);
+
   // create shared node queue to store nodes accessed by threads
-  node_queue_t *queue = (node_queue_t*) malloc(sizeof(node_queue_t));
-  init_node_queue(queue);
-  _bfs_helper(ret_table, start, dist);
+  queue_t *queue = (queue_t*) malloc(sizeof(queue_t));
+  queue_init(queue);
+  queue_push(queue, start, 0);
+
+  // start search
+  while (!queue_empty(queue)) {
+    queue_node_t* subtree_queue_node = queue_pop(queue);
+
+    // ensure that we are still within our original designated neighborhood
+    int graph_dist = subtree_queue_node->dist;
+    if (graph_dist > dist) continue;
+
+    // take our root and iterate over neighbors
+    graph_node_t* subtree_root = subtree_queue_node->g_node;
+    list_node_t* node = subtree_root->neighbors;
+    while (node != NULL) {
+      // pull graph node and iterate
+      graph_node_t *g_node = node->graph_node;
+      node = node->next;
+      // node is already contained in the list, skip this: O(1)
+      if (search_table(ret_table, g_node->type, g_node->val) != NULL) continue;
+      add(ret_table, g_node);
+      queue_push(queue, g_node, graph_dist+1);
+    }
+  }
+   
   return ret_table;
 }
 
