@@ -21,6 +21,7 @@ typedef struct graph_node {
     char type; // S or C
     const char* val;
     list_node_t* neighbors;
+    int flag; // generally useful to include :)
 } graph_node_t;
 
 

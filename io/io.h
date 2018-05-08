@@ -12,6 +12,8 @@ void write_to_file(hash_table_t *h_table, const char *file_path);
 
 hash_table_t* read_from_file(const char *file_path);
 
+int get_next_name(FILE* fp, char name[MAX_STR], char* c);
+
 void print_prompt();
 
 #endif

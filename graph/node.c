@@ -13,6 +13,7 @@ graph_node_t* add_node(char type, const char* val) {
     new_node->type = type;
     new_node->val = malloc_val;
     new_node->neighbors = NULL;
+    new_node->flag = 0;
     return new_node;
   } else {
     perror("Malloc failed");
