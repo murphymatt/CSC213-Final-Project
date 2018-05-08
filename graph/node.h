@@ -13,17 +13,17 @@ extern "C" {
 
 struct graph_node;
 
+typedef struct list_node {
+  struct graph_node* graph_node;
+  struct list_node* next;
+} list_node_t;
+
 typedef struct graph_node {
   char type; // S or C
   const char* val;
   list_node_t* neighbors;
   pthread_mutex_t m;
 } graph_node_t;
-
-typedef struct list_node {
-  graph_node_t* graph_node;
-  struct list_node* next;
-} list_node_t;
 
 graph_node_t* add_node(char type, const char* val);
 
