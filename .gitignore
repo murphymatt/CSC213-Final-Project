@@ -52,3 +52,5 @@ Mkfile.old
 dkms.conf
 
 deps
+testing/graph_test
+io/file.txt
