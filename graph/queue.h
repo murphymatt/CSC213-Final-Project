@@ -9,24 +9,28 @@ extern "C" {
 #include <stdbool.h>
 #include "node.h"
 
+// queue used for bfs, contains distance from start metric
 typedef struct queue_node {
   graph_node_t* g_node;
+  int dist;
   struct queue_node* next;
 } queue_node_t;
 
-typedef struct node_queue {
+typedef struct queue {
   queue_node_t* front;
   queue_node_t* back;
   int size;
-} node_queue_t;
+} queue_t;
 
-void init_node_queue(node_queue_t* queue);
+void queue_node_init(queue_node_t* node, graph_node_t* gnode, int dist);
 
-bool queue_empty(node_queue_t* queue);
+void queue_init(queue_t* queue);
 
-void queue_push(node_queue_t* queue, graph_node_t* node);
+bool queue_empty(queue_t* queue);
 
-graph_node_t* queue_pop(node_queue_t* queue);
+void queue_push(queue_t* queue, graph_node_t* node, int dist);
+
+queue_node_t* queue_pop(queue_t* queue);
 
 // This makes the header file work for both C and C++
 #ifdef __cplusplus
