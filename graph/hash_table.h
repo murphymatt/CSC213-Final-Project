@@ -44,8 +44,6 @@ hash_table_t* bfs(graph_node_t* start, int dist, int num_threads);
 
 void set_flags(hash_table_t* ht, int n);
 
-void _bfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist);
-
 unsigned long hash_function(const char* word);
 
 // This makes the header file work for both C and C++

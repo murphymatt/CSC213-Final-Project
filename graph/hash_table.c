@@ -124,8 +124,6 @@ hash_table_t* bfs(graph_node_t* start, int dist, int num_threads) {
   num_threads=4;
   pthread_t threads[num_threads];
 
-  // _bfs_helper(ret_table, start, dist);
-
   // create shared node queue to store nodes accessed by threads
   queue_t *queue = (queue_t*) malloc(sizeof(queue_t));
   queue_init(queue);
@@ -154,22 +152,4 @@ hash_table_t* bfs(graph_node_t* start, int dist, int num_threads) {
   }
    
   return ret_table;
-}
-
-/*
- * pre: ret_table starts empty at beginning of search
- * post: ret_table contains all nodes in graph within distance from start
- */
-void _bfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
-  if (dist <= 0) return;
-
-  list_node_t* node = start->neighbors;
-  while (node != NULL) {
-    graph_node_t* g_node = node->graph_node;
-    // node is already contained in search list... skip this
-    if (search_table(ret_table, g_node->type, g_node->val) != NULL) continue;
-    add(ret_table, g_node);
-    _bfs_helper(ret_table, g_node, dist-1);
-    node = node->next;
-  }
 }
