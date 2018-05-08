@@ -4,6 +4,7 @@
  ***********************************************************************/
 
 #include "hash_table.h"
+#include "queue.h"
 
 /* Hash table essentials */
 
@@ -112,10 +113,46 @@ unsigned long hash_function(const char* word) {
   return hash;
 }
 
-hash_table_t* dfs(graph_node_t* start, int dist) {
+hash_table_t* bfs(graph_node_t* start, int dist, int num_threads) {
   hash_table_t* ret_table = malloc(sizeof(hash_table_t));
   initialize_hash_table(ret_table);
-  _dfs_helper(ret_table, start, dist);
+  if (dist == 0) {
+    add(ret_table, start);
+    return ret_table;
+  }
+
+  num_threads=4;
+  pthread_t threads[num_threads];
+
+  // _bfs_helper(ret_table, start, dist);
+
+  // create shared node queue to store nodes accessed by threads
+  queue_t *queue = (queue_t*) malloc(sizeof(queue_t));
+  queue_init(queue);
+  queue_push(queue, start, 0);
+
+  // start search
+  while (!queue_empty(queue)) {
+    queue_node_t* subtree_queue_node = queue_pop(queue);
+
+    // ensure that we are still within our original designated neighborhood
+    int graph_dist = subtree_queue_node->dist;
+    if (graph_dist > dist) continue;
+
+    // take our root and iterate over neighbors
+    graph_node_t* subtree_root = subtree_queue_node->g_node;
+    list_node_t* node = subtree_root->neighbors;
+    while (node != NULL) {
+      // pull graph node and iterate
+      graph_node_t *g_node = node->graph_node;
+      node = node->next;
+      // node is already contained in the list, skip this: O(1)
+      if (search_table(ret_table, g_node->type, g_node->val) != NULL) continue;
+      add(ret_table, g_node);
+      queue_push(queue, g_node, graph_dist+1);
+    }
+  }
+   
   return ret_table;
 }
 
@@ -123,7 +160,7 @@ hash_table_t* dfs(graph_node_t* start, int dist) {
  * pre: ret_table starts empty at beginning of search
  * post: ret_table contains all nodes in graph within distance from start
  */
-void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
+void _bfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
   if (dist <= 0) return;
 
   list_node_t* node = start->neighbors;
@@ -132,7 +169,7 @@ void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
     // node is already contained in search list... skip this
     if (search_table(ret_table, g_node->type, g_node->val) != NULL) continue;
     add(ret_table, g_node);
-    _dfs_helper(ret_table, g_node, dist-1);
+    _bfs_helper(ret_table, g_node, dist-1);
     node = node->next;
   }
 }

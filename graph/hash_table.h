@@ -40,11 +40,11 @@ void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node);
 
 graph_node_t* search_table(hash_table_t* hash, char type, const char* val);
 
+hash_table_t* bfs(graph_node_t* start, int dist, int num_threads);
+
 void set_flags(hash_table_t* ht, int n);
 
-hash_table_t* dfs(graph_node_t* start, int dist);
-
-void _dfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist);
+void _bfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist);
 
 unsigned long hash_function(const char* word);
 
