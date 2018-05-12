@@ -37,7 +37,7 @@ void add(hash_table_t* hash, graph_node_t* graph_node) {
     new_node->graph_node = graph_node;
     new_node->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 
-    //get hash value 
+    //get hash value and associated header 
     unsigned long index = hash_function(graph_node->val);
     header_node_t* current = hash->table[index];
 

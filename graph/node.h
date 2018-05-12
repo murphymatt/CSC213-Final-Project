@@ -11,8 +11,6 @@ extern "C" {
 #include <stdbool.h>
 #include <pthread.h>
 
-struct graph_node;
-
 typedef struct list_node {
   struct graph_node* graph_node;
   struct list_node* next;
