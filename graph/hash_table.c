@@ -60,23 +60,27 @@ post: if word was in hash, it has been removed. Otherwise, nothing changes
 */
 void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node) {
   unsigned long index = hash_function(graph_node->val);
-  hash_node_t* current = hash->table[index];
+  header_node_t* current_header = hash->table[index];
+  pthread_mutex_lock(&(current_header->m));
+  hash_node_t current = current_header->hash_node;
 
   hash_node_t* previous = NULL;
   while (NULL != current) {
     if (graph_node == current->graph_node) {
       /* First element? */
       if (NULL == previous) {
-        hash->table[index] = current->next;
+        current_header->hash_node = current->next;
       } else {
         previous->next = current->next;
       }
       free(current);
+      pthread_mutex_unlock(&(current_header->m));
       return;
     }
     previous = current;
     current = current->next;
   }
+  pthread_mutex_unlock(&(current_header->m));
 }
 
 /*
