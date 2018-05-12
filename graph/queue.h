@@ -7,6 +7,8 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include <pthread.h>
+
 #include "node.h"
 
 // queue used for bfs, contains distance from start metric
@@ -20,6 +22,7 @@ typedef struct queue {
   queue_node_t* front;
   queue_node_t* back;
   int size;
+  pthread_mutex_t m;
 } queue_t;
 
 void queue_node_init(queue_node_t* node, graph_node_t* gnode, int dist);

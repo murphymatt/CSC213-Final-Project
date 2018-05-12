@@ -22,6 +22,7 @@ bool queue_empty(queue_t* queue) {
 void queue_push(queue_t* queue, graph_node_t* node, int dist) {
   queue_node_t *new_node = (queue_node_t*) malloc(sizeof(queue_node_t));
   queue_node_init(new_node, node, dist);
+  pthread_mutex_lock(&queue->m);
   if (queue_empty(queue)) {
     queue->front = new_node;
     queue->back = new_node;
@@ -30,12 +31,15 @@ void queue_push(queue_t* queue, graph_node_t* node, int dist) {
     queue->back = new_node;
   }
   queue->size++;
+  pthread_mutex_unlock(&queue->m);
 }
 
 queue_node_t* queue_pop(queue_t* queue) {
   if (queue_empty(queue)) return NULL;
+  pthread_mutex_lock(&queue->m);
   queue_node_t* ret_node = queue->front;
   queue->front = ret_node->next;
   queue->size--;
+  pthread_mutex_unlock(&queue->m);s
   return ret_node;
 }
