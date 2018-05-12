@@ -33,7 +33,7 @@ typedef struct header_node {
 } header_node_t;
 
 typedef struct hash_table {
-  header_node** table;
+  header_node_t** table;
 } hash_table_t;
 
 /* Hash table essentials */

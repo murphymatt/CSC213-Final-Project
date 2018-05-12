@@ -13,7 +13,7 @@ pre: none
 post: hash is either a hash table, or NULL (if space couldn't be created)
 */
 void initialize_hash_table(hash_table_t* hash_table) {
-  hash_node_t** table = malloc(sizeof(hash_node_t) * MAX_ARR_LENGTH);
+  header_node_t** table = malloc(sizeof(hash_node_t) * MAX_ARR_LENGTH);
   if (table == NULL) {
     perror("Failed to malloc hash table");
     exit(2);
@@ -51,18 +51,18 @@ void add(hash_table_t* hash, graph_node_t* graph_node) {
 
     //lock current header
     pthread_mutex_t m = current->m;
-    pthread_mutex_lock(&m); 
+    pthread_mutex_lock(&m);
 
     new_node->next = current->hash_node;
     hash->table[index]->hash_node = new_node;
 
+    //unlock current header
+    pthread_mutex_unlock(&m);
+
   } else {
     perror("Failed to malloc"); 
     exit(2);
-  } //end else 
- 
-  //unlock current header
-  pthread_mutex_unlock(&m); 
+  } //end else   
 }
 
 /*
@@ -73,7 +73,7 @@ void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node) {
   unsigned long index = hash_function(graph_node->val);
   header_node_t* current_header = hash->table[index];
   pthread_mutex_lock(&(current_header->m));
-  hash_node_t current = current_header->hash_node;
+  hash_node_t* current = current_header->hash_node;
 
   hash_node_t* previous = NULL;
   while (NULL != current) {
@@ -121,7 +121,7 @@ graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
 void set_flags(hash_table_t* ht, int n) {
   hash_node_t* current;
   for (int i = 0; i < MAX_ARR_LENGTH; i++) {
-    current = ht->table[i];
+    current = ht->table[i]->hash_node;
     while (current != NULL) {
         current->graph_node->flag = n;
         current = current->next;
