@@ -1,8 +1,3 @@
-/***********************************************************************
- * Name:        Henry Fisher
- * Description: Hash table header for word frequency project
- ***********************************************************************/
-
 #ifndef __hash_table_H__ 
 #define __hash_table_H__ 
 
@@ -36,9 +31,10 @@ typedef struct hash_table {
   header_node_t** table;
 } hash_table_t;
 
-/* Hash table essentials */
+// initializes a hash table
 void initialize_hash_table(hash_table_t* hash_table);
 
+// adds graph node to hash table
 void add(hash_table_t* hash, graph_node_t* graph_node);
 
 void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node);
