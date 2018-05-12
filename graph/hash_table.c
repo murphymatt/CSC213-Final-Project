@@ -1,8 +1,3 @@
-/***********************************************************************
- * Name:        Henry Fisher
- * Description: Hash table implementation for word frequency project
- ***********************************************************************/
-
 #include "hash_table.h"
 #include "queue.h"
 
@@ -12,15 +7,29 @@
 pre: none
 post: hash is either a hash table, or NULL (if space couldn't be created)
 */
-void initialize_hash_table(hash_table_t* hash_table) {
-  hash_node_t** table = malloc(sizeof(hash_node_t) * MAX_ARR_LENGTH);
+void hash_table_initialize(hash_table_t* ht) {
+  header_node_t** table = malloc(sizeof(hash_node_t) * MAX_ARR_LENGTH);
   if (table == NULL) {
     perror("Failed to malloc hash table");
     exit(2);
   }
-  for (int i = 0; i < MAX_ARR_LENGTH; i++)
-    table[i] = NULL;
-  hash_table->table = table; 
+
+  //malloc space for all headers
+  for (int i = 0; i < MAX_ARR_LENGTH; i++) {
+    header_node_t* new_header = (header_node_t*) malloc(sizeof(header_node_t));
+    
+    //error check 
+    if (new_header == NULL) {
+      perror("Failed to malloc header");
+      exit(2);
+    } //end if 
+
+    //set fields of header 
+    new_header->hash_node = NULL;
+    new_header->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+    table[i] = new_header;
+  }
+  ht->table = table; 
 }
 
 /* 
@@ -28,80 +37,107 @@ pre: hash is not NULL, word has null pointer
 post: word will either be added with frequency of 1, or have had its
 frequency incremented
 */
-void add(hash_table_t* hash, graph_node_t* graph_node) {
+void hash_table_add(hash_table_t* ht, graph_node_t* graph_node) {  
+  //malloc for new node to add 
   hash_node_t* new_node = (hash_node_t*) malloc(sizeof(hash_node_t));
+  
+  //error check, add node to graph 
   if (NULL != new_node) {
     new_node->graph_node = graph_node;
     new_node->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 
+    //get hash value and associated header 
     unsigned long index = hash_function(graph_node->val);
-    hash_node_t* current = hash->table[index];
+    header_node_t* current = ht->table[index];
 
-    new_node->next = current;
-    hash->table[index] = new_node;
+    //lock current header
+    pthread_mutex_t m = current->m;
+    pthread_mutex_lock(&m);
+
+    new_node->next = current->hash_node;
+    ht->table[index]->hash_node = new_node;
+
+    //unlock current header
+    pthread_mutex_unlock(&m);
 
   } else {
-    perror("Failed to malloc");
+    perror("Failed to malloc"); 
     exit(2);
-  }
+  } //end else 
 }
 
 /*
 pre: hash is initialized
 post: if word was in hash, it has been removed. Otherwise, nothing changes
 */
-void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node) {
+void hash_table_delete_entry(hash_table_t* ht, graph_node_t* graph_node) {
+  
+  //get hash value and associated header 
   unsigned long index = hash_function(graph_node->val);
-  hash_node_t* current = hash->table[index];
+  header_node_t* current_header = ht->table[index];
+  pthread_mutex_lock(&(current_header->m));
+  hash_node_t* current = current_header->hash_node;
 
   hash_node_t* previous = NULL;
   while (NULL != current) {
     if (graph_node == current->graph_node) {
       /* First element? */
       if (NULL == previous) {
-        hash->table[index] = current->next;
+        current_header->hash_node = current->next;
       } else {
         previous->next = current->next;
-      }
+      } //end else
       free(current);
+      pthread_mutex_unlock(&(current_header->m));
       return;
-    }
+    }//end if 
     previous = current;
     current = current->next;
-  }
+  } //end while 
+  
+  pthread_mutex_unlock(&(current_header->m));//unlock header 
 }
 
 /*
  * pre: h_table is initialized, val is not null
  * post: returns node if node exists, else returns NULL
  */
-graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
-  unsigned long hash = hash_function(val);
+graph_node_t* hash_table_search(hash_table_t* ht, char type, const char* val) {
+  //get hash value and header node
+  unsigned long index = hash_function(val);
+  header_node_t* header = ht->table[index];
+
+  //node to search for 
   graph_node_t* search_node = add_node(type, val);
-  hash_node_t* node = h_table->table[hash];
+  
+  //lock current header 
+  pthread_mutex_t m = header->m;
+  pthread_mutex_lock(&m);
+  hash_node_t* node = header->hash_node;
+
+  //loop through until find search_node 
   while (node != NULL && !_compare_node(search_node, node->graph_node)) {
   	node = node->next;
-  }
+  }//end while 
+  
   free(search_node);
+  pthread_mutex_unlock(&m);//unlock header 
+
   return node != NULL ? node->graph_node : NULL;
+
 }
 
-void set_flags(hash_table_t* ht, int n) {
+void hash_table_set_flags(hash_table_t* ht, int n) {
   hash_node_t* current;
   for (int i = 0; i < MAX_ARR_LENGTH; i++) {
-    current = ht->table[i];
+    current = ht->table[i]->hash_node;
     while (current != NULL) {
         current->graph_node->flag = n;
         current = current->next;
-    }
-  }
+    }//end while
+  }//end for 
 }
 
-/*
-pre: none
-post: returns int specific to word
-citation: http://www.cse.yorku.ca/~oz/hash.html
-*/
 unsigned long hash_function(const char* word) {
   unsigned long hash = 5381;
   int i;
@@ -115,9 +151,9 @@ unsigned long hash_function(const char* word) {
 
 hash_table_t* bfs(graph_node_t* start, int dist, int num_threads) {
   hash_table_t* ret_table = malloc(sizeof(hash_table_t));
-  initialize_hash_table(ret_table);
+  hash_table_initialize(ret_table);
   if (dist == 0) {
-    add(ret_table, start);
+    hash_table_add(ret_table, start);
     return ret_table;
   }
 
@@ -145,8 +181,8 @@ hash_table_t* bfs(graph_node_t* start, int dist, int num_threads) {
       graph_node_t *g_node = node->graph_node;
       node = node->next;
       // node is already contained in the list, skip this: O(1)
-      if (search_table(ret_table, g_node->type, g_node->val) != NULL) continue;
-      add(ret_table, g_node);
+      if (hash_table_search(ret_table, g_node->type, g_node->val) != NULL) continue;
+      hash_table_add(ret_table, g_node);
       queue_push(queue, g_node, graph_dist+1);
     }
   }

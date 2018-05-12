@@ -1,8 +1,3 @@
-/***********************************************************************
- * Name:        Henry Fisher
- * Description: Hash table header for word frequency project
- ***********************************************************************/
-
 #ifndef __hash_table_H__ 
 #define __hash_table_H__ 
 
@@ -28,27 +23,36 @@ typedef struct hash_node {
   pthread_mutex_t m;
 } hash_node_t;
 
+typedef struct header_node {
+  hash_node_t* hash_node;
+  pthread_mutex_t m;
+} header_node_t;
+
 typedef struct hash_table {
-  hash_node_t** table;
+  header_node_t** table;
 } hash_table_t;
+
 
 typedef struct bfs_pthread_args {
   queue_t* queue;
   hash_table_t* ret_table;
 } bfs_pthread_args_t;
 
-/* Hash table essentials */
-void initialize_hash_table(hash_table_t* hash_table);
+// initializes a hash table
+void hash_table_initialize(hash_table_t* ht);
 
-void add(hash_table_t* hash, graph_node_t* graph_node);
+// adds graph node to hash table
+void hash_table_add(hash_table_t* ht, graph_node_t* graph_node);
 
-void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node);
+void hash_table_delete_entry(hash_table_t* ht, graph_node_t* graph_node);
 
-graph_node_t* search_table(hash_table_t* hash, char type, const char* val);
+graph_node_t* hash_table_search(hash_table_t* ht, char type, const char* val);
 
 hash_table_t* bfs(graph_node_t* start, int dist, int num_threads);
 
 void* bfs_pthread_fn(void* args);
+
+void hash_table_set_flags(hash_table_t* ht, int n);
 
 void set_flags(hash_table_t* ht, int n);
 

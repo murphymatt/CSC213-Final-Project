@@ -23,7 +23,7 @@ bool _compare_node(graph_node_t* node1, graph_node_t* node2) {
   return node1->type == node2->type && !strcmp(node1->val, node2->val);
 }
 
-void add_neighbor(graph_node_t* node1, graph_node_t* node2) {
+void add_node_neighbor(graph_node_t* node1, graph_node_t* node2) {
   pthread_mutex_lock(&node1->m);
   pthread_mutex_lock(&node2->m);
   list_node_t* node1_list = (list_node_t*) malloc(sizeof(list_node_t));
@@ -45,7 +45,7 @@ void add_neighbor(graph_node_t* node1, graph_node_t* node2) {
 }
 
 
-void delete_node(graph_node_t* sad_node) {
+void graph_delete(graph_node_t* sad_node) {
   pthread_mutex_lock(&sad_node->m);
   if (sad_node == NULL) {
     pthread_mutex_unlock(&sad_node->m);

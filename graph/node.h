@@ -11,8 +11,6 @@ extern "C" {
 #include <stdbool.h>
 #include <pthread.h>
 
-struct graph_node;
-
 typedef struct list_node {
   struct graph_node* graph_node;
   struct list_node* next;
@@ -30,9 +28,9 @@ graph_node_t* add_node(char type, const char* val);
 
 bool _compare_node(graph_node_t* node1, graph_node_t* node2);
 
-void add_neighbor(graph_node_t* node1, graph_node_t* node2);
+void add_node_neighbor(graph_node_t* node1, graph_node_t* node2);
 
-void delete_node(graph_node_t* sad_node);
+void graph_delete(graph_node_t* sad_node);
 //
 // This makes the header file work for both C and C++
 #ifdef __cplusplus
