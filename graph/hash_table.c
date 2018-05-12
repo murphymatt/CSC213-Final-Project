@@ -37,21 +37,32 @@ post: word will either be added with frequency of 1, or have had its
 frequency incremented
 */
 void add(hash_table_t* hash, graph_node_t* graph_node) {
+  
+  //malloc for new node to add 
   hash_node_t* new_node = (hash_node_t*) malloc(sizeof(hash_node_t));
+  
+  //error check, add node to graph 
   if (NULL != new_node) {
     new_node->graph_node = graph_node;
     new_node->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 
     unsigned long index = hash_function(graph_node->val);
-    hash_node_t* current = hash->table[index];
+    header_node_t* current = hash->table[index];
 
-    new_node->next = current;
-    hash->table[index] = new_node;
+    //lock current header
+    pthread_mutex_t m = current->m;
+    pthread_mutex_lock(&m); 
+
+    new_node->next = current->hash_node;
+    hash->table[index]->hash_node = new_node;
 
   } else {
-    perror("Failed to malloc");
+    perror("Failed to malloc"); 
     exit(2);
-  }
+  } //end else 
+ 
+  //unlock current header
+  pthread_mutex_unlock(&m); 
 }
 
 /*
@@ -86,12 +97,21 @@ void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node) {
 graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
   unsigned long hash = hash_function(val);
   graph_node_t* search_node = add_node(type, val);
-  hash_node_t* node = h_table->table[hash];
+  header_node_t* header = h_table->table[hash];
+
+  pthread_mutex_t m = header->m;
+  pthread_mutex_lock(&m);
+  hash_node_t* node = header->hash_node;
+
+
   while (node != NULL && !_compare_node(search_node, node->graph_node)) {
   	node = node->next;
   }
   free(search_node);
+  pthread_mutex_unlock(&m);
+
   return node != NULL ? node->graph_node : NULL;
+
 }
 
 void set_flags(hash_table_t* ht, int n) {
