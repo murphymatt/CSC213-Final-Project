@@ -17,8 +17,16 @@ void initialize_hash_table(hash_table_t* hash_table) {
     perror("Failed to malloc hash table");
     exit(2);
   }
-  for (int i = 0; i < MAX_ARR_LENGTH; i++)
-    table[i] = NULL;
+  for (int i = 0; i < MAX_ARR_LENGTH; i++) {
+    header_node_t* new_header = (header_node_t*) malloc(sizeof(header_node_t));
+    if (new_header == NULL) {
+      perror("Failed to malloc header");
+      exit(2);
+    }
+    new_header->hash_node = NULL;
+    new_header->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+    table[i] = new_header;
+  }
   hash_table->table = table; 
 }
 

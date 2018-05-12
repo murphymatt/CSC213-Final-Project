@@ -27,8 +27,13 @@ typedef struct hash_node {
   pthread_mutex_t m;
 } hash_node_t;
 
+typedef struct header_node {
+  hash_node_t* hash_node;
+  pthread_mutex_t m;
+} header_node_t;
+
 typedef struct hash_table {
-  hash_node_t** table;
+  header_node** table;
 } hash_table_t;
 
 /* Hash table essentials */
