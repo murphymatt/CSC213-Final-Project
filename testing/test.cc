@@ -40,23 +40,23 @@ TEST(GraphTest, NodeAddTest) {
 
 
 	for (int i = 0; i < ARR_LEN; ++i)		
-		add_neighbor(people_arr[i], csc213);
+		add_node_neighbor(people_arr[i], csc213);
 
-	add_neighbor(maddie, csc261);
-	add_neighbor(cameron, csc261);
-	add_neighbor(abyaya, csc261);
-	add_neighbor(cara, csc261);
+	add_node_neighbor(maddie, csc261);
+	add_node_neighbor(cameron, csc261);
+	add_node_neighbor(abyaya, csc261);
+	add_node_neighbor(cara, csc261);
 
-	add_neighbor(henry, mus116);
-	add_neighbor(myles, mus116);
-	add_neighbor(tapiwa, mus116);
+	add_node_neighbor(henry, mus116);
+	add_node_neighbor(myles, mus116);
+	add_node_neighbor(tapiwa, mus116);
 
 	// (last semester)
-	add_neighbor(maddie, csc301);
-	add_neighbor(myles, csc301);
-	add_neighbor(abyaya, csc301);
-	add_neighbor(cameron, csc301);
-	add_neighbor(joshua, csc301);
+	add_node_neighbor(maddie, csc301);
+	add_node_neighbor(myles, csc301);
+	add_node_neighbor(abyaya, csc301);
+	add_node_neighbor(cameron, csc301);
+	add_node_neighbor(joshua, csc301);
 
 
 	list_node_t* current_neighbor = csc213->neighbors; 
@@ -104,27 +104,27 @@ TEST(GraphTest, NodeDeleteTest) {
 	graph_node_t* csc301 = add_node('C', "CSC301");
 
 	
-	add_neighbor(henry, csc213);
-	add_neighbor(myles, csc213);
-	add_neighbor(cameron, csc213);
-	add_neighbor(abyaya, csc213);
-	add_neighbor(maddie, csc213);
+	add_node_neighbor(henry, csc213);
+	add_node_neighbor(myles, csc213);
+	add_node_neighbor(cameron, csc213);
+	add_node_neighbor(abyaya, csc213);
+	add_node_neighbor(maddie, csc213);
 
 	
-	add_neighbor(cameron, csc261);
-	add_neighbor(maddie, csc261);
-	add_neighbor(abyaya, csc261);
+	add_node_neighbor(cameron, csc261);
+	add_node_neighbor(maddie, csc261);
+	add_node_neighbor(abyaya, csc261);
 
-	add_neighbor(henry, mus116);
-	add_neighbor(myles, mus116);
+	add_node_neighbor(henry, mus116);
+	add_node_neighbor(myles, mus116);
 
 	// (last semester)
-	add_neighbor(maddie, csc301);
-	add_neighbor(myles, csc301);
-	add_neighbor(abyaya, csc301);
-	add_neighbor(cameron, csc301);
+	add_node_neighbor(maddie, csc301);
+	add_node_neighbor(myles, csc301);
+	add_node_neighbor(abyaya, csc301);
+	add_node_neighbor(cameron, csc301);
 
-	delete_node(maddie);
+	graph_delete(maddie);
 
 	list_node_t* current = csc213->neighbors;
 	while (current != NULL) {
@@ -138,8 +138,8 @@ TEST(GraphTest, NodeDeleteTest) {
 		current = current->next;
 	}
 
-	delete_node(henry);
-	delete_node(myles);
+	graph_delete(henry);
+	graph_delete(myles);
 
 	ASSERT_EQ(mus116->neighbors, (list_node_t*) NULL);
 
@@ -153,19 +153,19 @@ TEST(GraphTest, NodeDeleteTest) {
 
 TEST(GraphTest, HashBasicAddTest) {
 	hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
-	initialize_hash_table(ht);
+	hash_table_initialize(ht);
 
 	graph_node_t* maddie = add_node('S', "Maddie Goldman");
 	graph_node_t* henry = add_node('S', "Henry Fisher");
 	graph_node_t* matt = add_node('S', "Matt Murphy");
 
-	add(ht, maddie);
-	add(ht, henry);
-	add(ht, matt);
+	hash_table_add(ht, maddie);
+	hash_table_add(ht, henry);
+	hash_table_add(ht, matt);
 
-	graph_node_t* new_maddie = search_table(ht, 'S', "Maddie Goldman");
-	graph_node_t* new_henry = search_table(ht, 'S', "Henry Fisher");
-	graph_node_t* new_matt = search_table(ht, 'S', "Matt Murphy");
+	graph_node_t* new_maddie = hash_table_search(ht, 'S', "Maddie Goldman");
+	graph_node_t* new_henry = hash_table_search(ht, 'S', "Henry Fisher");
+	graph_node_t* new_matt = hash_table_search(ht, 'S', "Matt Murphy");
 	
 	ASSERT_EQ(maddie, new_maddie);
 	ASSERT_EQ(henry, new_henry);
@@ -206,69 +206,69 @@ TEST(GraphTest, BFSTest) {
 
 
 	for (int i = 0; i < ARR_LEN; ++i)		
-		add_neighbor(people_arr[i], csc213);
+		add_node_neighbor(people_arr[i], csc213);
 
-	add_neighbor(maddie, csc261);
-	add_neighbor(cameron, csc261);
-	add_neighbor(abyaya, csc261);
-	add_neighbor(cara, csc261);
+	add_node_neighbor(maddie, csc261);
+	add_node_neighbor(cameron, csc261);
+	add_node_neighbor(abyaya, csc261);
+	add_node_neighbor(cara, csc261);
 
-	add_neighbor(henry, mus116);
-	add_neighbor(myles, mus116);
-	add_neighbor(tapiwa, mus116);
+	add_node_neighbor(henry, mus116);
+	add_node_neighbor(myles, mus116);
+	add_node_neighbor(tapiwa, mus116);
 
 	// (last semester)
-	add_neighbor(maddie, csc301);
-	add_neighbor(myles, csc301);
-	add_neighbor(abyaya, csc301);
-	add_neighbor(cameron, csc301);
-	add_neighbor(joshua, csc301);
+	add_node_neighbor(maddie, csc301);
+	add_node_neighbor(myles, csc301);
+	add_node_neighbor(abyaya, csc301);
+	add_node_neighbor(cameron, csc301);
+	add_node_neighbor(joshua, csc301);
 
 
 	list_node_t* current_neighbor = csc213->neighbors; 
 
     // add each of the student and class nodes to the hash table
     hash_table_t ht;
-    initialize_hash_table(&ht);
+    hash_table_initialize(&ht);
 
     for (int i = 0; i < ARR_LEN; ++i)
-        add(&ht, people_arr[i]);
-    add(&ht, csc213);
-    add(&ht, csc261);
-    add(&ht, mus116);
-    add(&ht, csc301);
+        hash_table_add(&ht, people_arr[i]);
+    hash_table_add(&ht, csc213);
+    hash_table_add(&ht, csc261);
+    hash_table_add(&ht, mus116);
+    hash_table_add(&ht, csc301);
 
     int num_threads = 4;
     hash_table_t *bfs_table = bfs(csc261, 1, num_threads);
     // ensure resulting neighbors are within returned hash table
-    graph_node_t* new_maddie  = search_table(bfs_table, 'S', "Maddie Goldman");
-    graph_node_t* new_cameron = search_table(bfs_table, 'S', "Cameron Chen");
-    graph_node_t* new_abyaya  = search_table(bfs_table, 'S', "Abyaya Lamsal");
-    graph_node_t* new_cara    = search_table(bfs_table, 'S', "Cara Bresnahan");
+    graph_node_t* new_maddie  = hash_table_search(bfs_table, 'S', "Maddie Goldman");
+    graph_node_t* new_cameron = hash_table_search(bfs_table, 'S', "Cameron Chen");
+    graph_node_t* new_abyaya  = hash_table_search(bfs_table, 'S', "Abyaya Lamsal");
+    graph_node_t* new_cara    = hash_table_search(bfs_table, 'S', "Cara Bresnahan");
     ASSERT_EQ(new_maddie,  maddie);
     ASSERT_EQ(new_cameron, cameron);
     ASSERT_EQ(new_abyaya,  abyaya);
     ASSERT_EQ(new_cara,    cara);
     
     // ensure no other nodes are within the returned hash table
-    graph_node_t* no_matt = search_table(bfs_table, 'S', "Matt Murphy");
+    graph_node_t* no_matt = hash_table_search(bfs_table, 'S', "Matt Murphy");
     ASSERT_TRUE(no_matt == NULL);
 }
 
 TEST(GraphTest, HashAddCollisionTest) {
 	hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
-	initialize_hash_table(ht);
+	hash_table_initialize(ht);
 
 	graph_node_t* maddie = add_node('S', "Maddie Goldman");
 	graph_node_t* maddie2 = add_node('C', "Maddie Goldman");
 
 	ASSERT_NE(maddie, maddie2);
 
-	add(ht, maddie);
-	add(ht, maddie2);
+	hash_table_add(ht, maddie);
+	hash_table_add(ht, maddie2);
 
-	graph_node_t* new_maddie = search_table(ht, 'S', "Maddie Goldman");
-	graph_node_t* new_maddie2 = search_table(ht, 'C', "Maddie Goldman");
+	graph_node_t* new_maddie = hash_table_search(ht, 'S', "Maddie Goldman");
+	graph_node_t* new_maddie2 = hash_table_search(ht, 'C', "Maddie Goldman");
 	
 	ASSERT_EQ(maddie, new_maddie);
 	ASSERT_EQ(maddie2, new_maddie2);
@@ -276,22 +276,22 @@ TEST(GraphTest, HashAddCollisionTest) {
 
 TEST(GraphTest, HashDeleteTest) {
 	hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
-	initialize_hash_table(ht);
+	hash_table_initialize(ht);
 
 	graph_node_t* maddie = add_node('S', "Maddie Goldman");
 	graph_node_t* maddie2 = add_node('C', "Maddie Goldman");
 
-	add(ht, maddie);
-	add(ht, maddie2);
+	hash_table_add(ht, maddie);
+	hash_table_add(ht, maddie2);
 
-	graph_node_t* new_maddie = search_table(ht, 'S', "Maddie Goldman");
-	graph_node_t* new_maddie2 = search_table(ht, 'C', "Maddie Goldman");
+	graph_node_t* new_maddie = hash_table_search(ht, 'S', "Maddie Goldman");
+	graph_node_t* new_maddie2 = hash_table_search(ht, 'C', "Maddie Goldman");
 
 	ASSERT_EQ(maddie, new_maddie);
 	ASSERT_EQ(maddie2, new_maddie2);
 
-	delete_hash_node(ht, maddie);
-	graph_node_t* new_new_maddie2 = search_table(ht, 'C', "Maddie Goldman");
+	hash_table_delete_entry(ht, maddie);
+	graph_node_t* new_new_maddie2 = hash_table_search(ht, 'C', "Maddie Goldman");
 	
 	ASSERT_EQ(maddie2, new_new_maddie2);
 }
