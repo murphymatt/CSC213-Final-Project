@@ -1,41 +1,32 @@
-/***********************************************************************
- * Name:        Henry Fisher
- * Description: Hash table implementation for word frequency project
- ***********************************************************************/
-
 #include "hash_table.h"
 #include "queue.h"
 
-/* Hash table essentials */
-
-/*
-pre: none
-post: hash is either a hash table, or NULL (if space couldn't be created)
-*/
 void initialize_hash_table(hash_table_t* hash_table) {
   hash_node_t** table = malloc(sizeof(hash_node_t) * MAX_ARR_LENGTH);
   if (table == NULL) {
     perror("Failed to malloc hash table");
     exit(2);
   }
+
+  //malloc space for all headers
   for (int i = 0; i < MAX_ARR_LENGTH; i++) {
     header_node_t* new_header = (header_node_t*) malloc(sizeof(header_node_t));
+    
+    //error check 
     if (new_header == NULL) {
       perror("Failed to malloc header");
       exit(2);
-    }
+    } //end if 
+
+    //set fields of header 
     new_header->hash_node = NULL;
     new_header->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
     table[i] = new_header;
-  }
+  }//end for 
   hash_table->table = table; 
 }
 
-/* 
-pre: hash is not NULL, word has null pointer
-post: word will either be added with frequency of 1, or have had its
-frequency incremented
-*/
+
 void add(hash_table_t* hash, graph_node_t* graph_node) {
   
   //malloc for new node to add 
@@ -46,12 +37,13 @@ void add(hash_table_t* hash, graph_node_t* graph_node) {
     new_node->graph_node = graph_node;
     new_node->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 
+    //get hash value 
     unsigned long index = hash_function(graph_node->val);
     header_node_t* current = hash->table[index];
 
     //lock current header
     pthread_mutex_t m = current->m;
-    pthread_mutex_lock(&m); 
+    pthread_mutex_lock(&m);
 
     new_node->next = current->hash_node;
     hash->table[index]->hash_node = new_node;
@@ -61,17 +53,17 @@ void add(hash_table_t* hash, graph_node_t* graph_node) {
     exit(2);
   } //end else 
  
-  //unlock current header
-  pthread_mutex_unlock(&m); 
+  
+  pthread_mutex_unlock(&m);//unlock header 
 }
 
-/*
-pre: hash is initialized
-post: if word was in hash, it has been removed. Otherwise, nothing changes
-*/
 void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node) {
+  
+  //get hash value and associated header 
   unsigned long index = hash_function(graph_node->val);
   header_node_t* current_header = hash->table[index];
+  
+  //lock current header node 
   pthread_mutex_lock(&(current_header->m));
   hash_node_t current = current_header->hash_node;
 
@@ -83,36 +75,41 @@ void delete_hash_node(hash_table_t* hash, graph_node_t* graph_node) {
         current_header->hash_node = current->next;
       } else {
         previous->next = current->next;
-      }
+      } //end else
       free(current);
       pthread_mutex_unlock(&(current_header->m));
       return;
-    }
+    }//end if 
     previous = current;
     current = current->next;
-  }
-  pthread_mutex_unlock(&(current_header->m));
+  } //end while 
+  
+  pthread_mutex_unlock(&(current_header->m));//unlock header 
 }
 
-/*
- * pre: h_table is initialized, val is not null
- * post: returns node if node exists, else returns NULL
- */
-graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
-  unsigned long hash = hash_function(val);
-  graph_node_t* search_node = add_node(type, val);
-  header_node_t* header = h_table->table[hash];
 
+graph_node_t* search_table(hash_table_t* h_table, char type, const char* val) {
+  
+  //get hash value and header node
+  unsigned long index = hash_function(val);
+  header_node_t* header = h_table->table[index];
+
+  //node to search for 
+  graph_node_t* search_node = add_node(type, val);
+  
+
+  //lock current header 
   pthread_mutex_t m = header->m;
   pthread_mutex_lock(&m);
   hash_node_t* node = header->hash_node;
 
-
+  //loop through until find search_node 
   while (node != NULL && !_compare_node(search_node, node->graph_node)) {
   	node = node->next;
-  }
+  }//end while 
+  
   free(search_node);
-  pthread_mutex_unlock(&m);
+  pthread_mutex_unlock(&m);//unlock header 
 
   return node != NULL ? node->graph_node : NULL;
 
@@ -125,15 +122,10 @@ void set_flags(hash_table_t* ht, int n) {
     while (current != NULL) {
         current->graph_node->flag = n;
         current = current->next;
-    }
-  }
+    }//end while
+  }//end for 
 }
 
-/*
-pre: none
-post: returns int specific to word
-citation: http://www.cse.yorku.ca/~oz/hash.html
-*/
 unsigned long hash_function(const char* word) {
   unsigned long hash = 5381;
   int i;
@@ -188,10 +180,6 @@ hash_table_t* bfs(graph_node_t* start, int dist, int num_threads) {
   return ret_table;
 }
 
-/*
- * pre: ret_table starts empty at beginning of search
- * post: ret_table contains all nodes in graph within distance from start
- */
 void _bfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist) {
   if (dist <= 0) return;
 
