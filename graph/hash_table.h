@@ -34,8 +34,9 @@ typedef struct hash_table {
 
 
 typedef struct bfs_pthread_args {
-  queue_t* queue;
+  queue_t* node_queue;
   hash_table_t* ret_table;
+  int dist;
 } bfs_pthread_args_t;
 
 // initializes a hash table

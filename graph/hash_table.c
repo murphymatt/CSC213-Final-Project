@@ -157,18 +157,37 @@ hash_table_t* bfs(graph_node_t* start, int dist, int num_threads) {
     return ret_table;
   }
 
-  num_threads=4;
-  pthread_t threads[num_threads];
-
   // create shared node queue to store nodes accessed by threads
   queue_t *queue = (queue_t*) malloc(sizeof(queue_t));
   queue_init(queue);
   queue_push(queue, start, 0);
 
-  // start search
-  while (!queue_empty(queue)) {
-    queue_node_t* subtree_queue_node = queue_pop(queue);
+  pthread_t threads[num_threads];
+  bfs_pthread_args_t thread_args[num_threads];
 
+  for (int i = 0; i < num_threads; ++i) {
+    thread_args[i].node_queue = queue;
+    thread_args[i].ret_table = ret_table;
+    thread_args[i].dist = dist;
+    pthread_create(&threads[i], NULL, bfs_pthread_fn, &thread_args[i]);
+  }
+
+  for (int i = 0; i < num_threads; ++i) {
+    pthread_join(threads[i], NULL);
+  }
+
+  return ret_table;
+}
+
+void* bfs_pthread_fn(void* args) {
+  bfs_pthread_args_t* bfs_args = (bfs_pthread_args_t*) args;
+  queue_t *nq = bfs_args->node_queue;
+  hash_table_t* ret_table = bfs_args->ret_table;
+  int dist = bfs_args->dist;
+
+  while (!queue_empty(nq)) {
+    queue_node_t* subtree_queue_node = queue_pop(nq);
+    
     // ensure that we are still within our original designated neighborhood
     int graph_dist = subtree_queue_node->dist;
     if (graph_dist > dist) continue;
@@ -181,16 +200,12 @@ hash_table_t* bfs(graph_node_t* start, int dist, int num_threads) {
       graph_node_t *g_node = node->graph_node;
       node = node->next;
       // node is already contained in the list, skip this: O(1)
-      if (hash_table_search(ret_table, g_node->type, g_node->val) != NULL) continue;
+      if (hash_table_search(ret_table, g_node->type, g_node->val) != NULL)
+        continue;
       hash_table_add(ret_table, g_node);
-      queue_push(queue, g_node, graph_dist+1);
+      queue_push(nq, g_node, graph_dist+1);
     }
   }
-   
-  return ret_table;
-}
 
-void* bfs_pthread_fn(void* args) {
-  bfs_pthread_args_t* bfs_args = (bfs_pthread_args_t*) args;
   return NULL;
 }
