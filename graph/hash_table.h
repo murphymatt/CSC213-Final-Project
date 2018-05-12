@@ -10,7 +10,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <pthread.h>
+
 #include "node.h"
+#include "queue.h"
 
 #define MAX_ARR_LENGTH 256
 
@@ -18,8 +21,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <pthread.h>
 
 typedef struct hash_node {
   graph_node_t* graph_node;
