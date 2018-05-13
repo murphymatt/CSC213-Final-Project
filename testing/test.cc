@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <gtest/gtest.h>
 
 #include "hash_table.h"
@@ -204,7 +207,6 @@ TEST(GraphTest, BFSTest) {
 	graph_node_t* mus116 = add_node('C', "MUS116");
 	graph_node_t* csc301 = add_node('C', "CSC301");
 
-
 	for (int i = 0; i < ARR_LEN; ++i)		
 		add_node_neighbor(people_arr[i], csc213);
 
@@ -224,40 +226,56 @@ TEST(GraphTest, BFSTest) {
 	add_node_neighbor(cameron, csc301);
 	add_node_neighbor(joshua, csc301);
 
-
 	list_node_t* current_neighbor = csc213->neighbors; 
 
-    // add each of the student and class nodes to the hash table
-    hash_table_t ht;
-    hash_table_initialize(&ht);
+  // add each of the student and class nodes to the hash table
+  hash_table_t ht;
+  hash_table_initialize(&ht);
 
-    for (int i = 0; i < ARR_LEN; ++i)
-        hash_table_add(&ht, people_arr[i]);
-    hash_table_add(&ht, csc213);
-    hash_table_add(&ht, csc261);
-    hash_table_add(&ht, mus116);
-    hash_table_add(&ht, csc301);
+  for (int i = 0; i < ARR_LEN; ++i)
+    hash_table_add(&ht, people_arr[i]);
+  hash_table_add(&ht, csc213);
+  hash_table_add(&ht, csc261);
+  hash_table_add(&ht, mus116);
+  hash_table_add(&ht, csc301);
 
-    int num_threads = 4;
-    hash_table_t *bfs_table = bfs(csc261, 1, num_threads);
-    // ensure resulting neighbors are within returned hash table
-    graph_node_t* new_maddie  = hash_table_search(bfs_table, 'S', "Maddie Goldman");
-    graph_node_t* new_cameron = hash_table_search(bfs_table, 'S', "Cameron Chen");
-    graph_node_t* new_abyaya  = hash_table_search(bfs_table, 'S', "Abyaya Lamsal");
-    graph_node_t* new_cara    = hash_table_search(bfs_table, 'S', "Cara Bresnahan");
-    ASSERT_EQ(new_maddie,  maddie);
-    ASSERT_EQ(new_cameron, cameron);
-    ASSERT_EQ(new_abyaya,  abyaya);
-    ASSERT_EQ(new_cara,    cara);
-    
-    // ensure no other nodes are within the returned hash table
-    graph_node_t* no_matt = hash_table_search(bfs_table, 'S', "Matt Murphy");
-    ASSERT_TRUE(no_matt == NULL);
+  /* 
+  list_node_t* get_nodes_ret = get_nodes(&ht);
+  while (NULL != get_nodes_ret) {
+    graph_node_t * g_node = get_nodes_ret->graph_node;
+    if (g_node != NULL)
+      fprintf(stderr, "%s ", g_node->val);
+    get_nodes_ret = get_nodes_ret->next;
+  }
+  */
+
+  int num_threads = 4;
+  hash_table_t *bfs_table = bfs(csc261, 1, num_threads);
+  // ensure resulting neighbors are within returned hash table
+  graph_node_t* new_maddie  = hash_table_search(bfs_table, 'S', "Maddie Goldman");
+  graph_node_t* new_cameron = hash_table_search(bfs_table, 'S', "Cameron Chen");
+  graph_node_t* new_abyaya  = hash_table_search(bfs_table, 'S', "Abyaya Lamsal");
+  graph_node_t* new_cara    = hash_table_search(bfs_table, 'S', "Cara Bresnahan");
+  ASSERT_EQ(new_maddie,  maddie);
+  ASSERT_EQ(new_cameron, cameron);
+  ASSERT_EQ(new_abyaya,  abyaya);
+  ASSERT_EQ(new_cara,    cara);
+
+  // ensure no other nodes are within the returned hash table
+  graph_node_t* no_matt = hash_table_search(bfs_table, 'S', "Matt Murphy");
+  ASSERT_TRUE(no_matt == NULL);
+
+  // return common courses of two students
+  list_node_t* matt_classes = get_nodes(bfs(matt, 1, 4));
+  list_node_t* henry_classes = get_nodes(bfs(henry, 1, 4));
+  list_node_t* matt_henry_int = node_intersection(matt_classes, henry_classes);
+  list_node_t* cur = matt_henry_int;
+  ASSERT_TRUE(list_node_contains(matt_henry_int, csc213->type, csc213->val));
 }
 
 TEST(GraphTest, HashAddCollisionTest) {
-	hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
-	hash_table_initialize(ht);
+  hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
+  hash_table_initialize(ht);
 
 	graph_node_t* maddie = add_node('S', "Maddie Goldman");
 	graph_node_t* maddie2 = add_node('C', "Maddie Goldman");
