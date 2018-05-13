@@ -40,6 +40,6 @@ queue_node_t* queue_pop(queue_t* queue) {
   queue_node_t* ret_node = queue->front;
   queue->front = ret_node->next;
   queue->size--;
-  pthread_mutex_unlock(&queue->m);s
+  pthread_mutex_unlock(&queue->m);
   return ret_node;
 }
