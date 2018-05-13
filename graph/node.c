@@ -4,6 +4,8 @@
 
 #include "node.h"
 
+////////////////////////////////////////////////////////////////////////////////
+// graph functions
 graph_node_t* add_node(char type, const char* val) {
   graph_node_t* new_node = (graph_node_t*) malloc(sizeof(graph_node_t));
   char* malloc_val =  (char*) malloc(sizeof(char) * MAX_STR);
@@ -18,10 +20,6 @@ graph_node_t* add_node(char type, const char* val) {
   } else {
     return NULL;
   } 
-}
-
-bool _compare_node(graph_node_t* node1, graph_node_t* node2) {
-  return node1->type == node2->type && !strcmp(node1->val, node2->val);
 }
 
 void add_node_neighbor(graph_node_t* node1, graph_node_t* node2) {
@@ -43,18 +41,6 @@ void add_node_neighbor(graph_node_t* node1, graph_node_t* node2) {
   }
   pthread_mutex_unlock(&node1->m);
   pthread_mutex_unlock(&node2->m);
-}
-
-list_node_t* list_node_append(list_node_t* list, graph_node_t* node) {
-  list_node_t* new_node;
-  if ((new_node = malloc(sizeof(list_node_t))) == NULL) {
-    fprintf(stderr, "list_node_append: Error allocating space for list node\n");
-    exit(EXIT_FAILURE);
-  }
-  new_node->graph_node = node;
-  new_node->next = list;
-  list = new_node;
-  return list;
 }
 
 void graph_delete(graph_node_t* sad_node) {
@@ -98,5 +84,38 @@ void graph_delete(graph_node_t* sad_node) {
   // Free sad node :(
   pthread_mutex_unlock(&sad_node->m);
   free(sad_node);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// list functions
+list_node_t* list_node_append(list_node_t* list, graph_node_t* node) {
+  list_node_t* new_node;
+  if ((new_node = malloc(sizeof(list_node_t))) == NULL) {
+    fprintf(stderr, "list_node_append: Error allocating space for list node\n");
+    exit(EXIT_FAILURE);
+  }
+  new_node->graph_node = node;
+  new_node->next = list;
+  list = new_node;
+  return list;
+}
+
+// O(n) linear search through list node
+bool list_node_contains(list_node_t* list, char type, const char* val) {
+  graph_node_t* search_node = add_node(type, val);
+  list_node_t* cur = list;
+  while (cur != NULL) {
+    if (_compare_node(cur->graph_node, search_node)) {
+      free(search_node);
+      return true;
+    }
+  }
+  return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// helper function
+bool _compare_node(graph_node_t* node1, graph_node_t* node2) {
+  return node1->type == node2->type && !strcmp(node1->val, node2->val);
 }
 

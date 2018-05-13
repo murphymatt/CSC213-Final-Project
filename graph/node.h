@@ -33,6 +33,7 @@ bool _compare_node(graph_node_t* node1, graph_node_t* node2);
 
 // list functions
 list_node_t* list_node_append(list_node_t* list, graph_node_t* node);
+bool list_node_contains(list_node_t* list, char type, const char* val);
 
 // This makes the header file work for both C and C++
 #ifdef __cplusplus
