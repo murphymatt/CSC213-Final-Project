@@ -16,7 +16,7 @@ graph_node_t* add_node(char type, const char* val) {
     return new_node;
   } else {
     return NULL;
-  }
+  } 
 }
 
 bool _compare_node(graph_node_t* node1, graph_node_t* node2) {

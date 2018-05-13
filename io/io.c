@@ -140,6 +140,8 @@ void get_user_input(hash_table_t* ht) {
   graph_node_t* new_student;
   graph_node_t* new_class;
   graph_node_t* sad_node; 
+  graph_node_t* search_node; 
+  char move; 
   int done = 0;
   int exit = 0; 
 
@@ -147,8 +149,9 @@ void get_user_input(hash_table_t* ht) {
     printf("Actions:\n"); 
     printf("S......Add a student\n");
     printf("C......Add a class\n"); 
-    printf("D......Delete an entry\n");
-    printf("L......List all entries\n");
+    printf("D......Delete a student node\n"); 
+    printf("E......Delete a class node\n"); 
+    printf("G......Get neighbors\n"); 
     printf("Q......quit\n"); 
     // add more
 
@@ -164,11 +167,11 @@ void get_user_input(hash_table_t* ht) {
 
       new_student = add_node('S', student_name);
       while(!done) {
-        printf("Add classes (q when done): ");
+        printf("Add classes (q when done):");
         scanf("%s", class_name);
         if(strcmp(class_name, "q") == 0) {
           done = 1;
-          char nothing = getchar();
+          move = getchar();
           continue;
         }//end if
         new_class = add_node('C', class_name);
@@ -176,14 +179,32 @@ void get_user_input(hash_table_t* ht) {
       }//end while
                   
       hash_table_add(ht, new_student);//add node to hash
-      continue; 
+      break; 
+      //continue; 
 
     case 'D':
-      printf("Enter name to delete: ");
+      printf("Enter name to delete:");
       scanf("%s", student_name);
       sad_node = hash_table_search(ht, 'S', student_name);
       graph_delete(sad_node); 
+      move = getchar(); 
       break;
+    
+    case 'E': 
+        printf("Enter class to delete:"); 
+        scanf("%s", class_name); 
+        sad_node = hash_table_search(ht, 'C', class_name); 
+        graph_delete(sad_node); 
+        move = getchar(); 
+        break; 
+
+    case 'G': 
+        printf("Enter a type and value to delete:"); 
+        printf("Type"); 
+        scanf("")
+        scanf("%s", class_name); 
+        search_node = 
+
     case 'Q':
       printf("Bye!\n");
       exit = 1;
