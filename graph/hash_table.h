@@ -70,5 +70,4 @@ void index_list_append(hash_table_t* ht, int ind);
 }
 #endif
 
-
 #endif

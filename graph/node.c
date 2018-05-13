@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -44,7 +45,7 @@ void add_node_neighbor(graph_node_t* node1, graph_node_t* node2) {
   pthread_mutex_unlock(&node2->m);
 }
 
-void list_node_append(list_node_t* list, graph_node_t* node) {
+list_node_t* list_node_append(list_node_t* list, graph_node_t* node) {
   list_node_t* new_node;
   if ((new_node = malloc(sizeof(list_node_t))) == NULL) {
     fprintf(stderr, "list_node_append: Error allocating space for list node\n");
@@ -53,6 +54,7 @@ void list_node_append(list_node_t* list, graph_node_t* node) {
   new_node->graph_node = node;
   new_node->next = list;
   list = new_node;
+  return list;
 }
 
 void graph_delete(graph_node_t* sad_node) {

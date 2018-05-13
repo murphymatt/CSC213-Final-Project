@@ -26,11 +26,13 @@ typedef struct graph_node {
 
 graph_node_t* add_node(char type, const char* val);
 void add_node_neighbor(graph_node_t* node1, graph_node_t* node2);
-void list_node_append(list_node_t* list, graph_node_t* node);
 void graph_delete(graph_node_t* sad_node);
+
 // helper functions
 bool _compare_node(graph_node_t* node1, graph_node_t* node2);
 
+// list functions
+list_node_t* list_node_append(list_node_t* list, graph_node_t* node);
 
 // This makes the header file work for both C and C++
 #ifdef __cplusplus

@@ -52,7 +52,7 @@ void hash_table_add(hash_table_t* ht, graph_node_t* graph_node) {
     header_node_t* current = ht->table[index];
 
     // if this bucket is empty, add its index into the index_table
-    if (current == NULL)
+    if (current->hash_node == NULL)
       index_list_append(ht, index);
 
     //lock current header
@@ -129,7 +129,6 @@ graph_node_t* hash_table_search(hash_table_t* ht, char type, const char* val) {
   pthread_mutex_unlock(&m);  // unlock header 
 
   return node != NULL ? node->graph_node : NULL;
-
 }
 
 void hash_table_set_flags(hash_table_t* ht, int n) {
@@ -139,8 +138,8 @@ void hash_table_set_flags(hash_table_t* ht, int n) {
     while (current != NULL) {
       current->graph_node->flag = n;
       current = current->next;
-    }// end while
-  }// end for 
+    } // end while
+  } // end for 
 }
 
 unsigned long hash_function(const char* word) {
@@ -228,13 +227,13 @@ void* bfs_pthread_fn(void* args) {
 }
 
 list_node_t* get_nodes(hash_table_t *ht) {
-  list_node_t* ret;
+  list_node_t* ret = NULL;
   index_node_t* ind_node = ht->index_list;
-  while (NULL != ind_node) {
+  while (ind_node != NULL) {
     int ind = ind_node->ind;
     hash_node_t* h_node = ht->table[ind]->hash_node;
-    while (NULL != h_node) {
-      list_node_append(ret, h_node->graph_node);
+    while (h_node != NULL) {
+      ret = list_node_append(ret, h_node->graph_node);
       h_node = h_node->next;
     }
     ind_node = ind_node->next;
