@@ -17,7 +17,7 @@ void hash_table_initialize(hash_table_t* ht) {
   // malloc space for all headers
   for (int i = 0; i < MAX_ARR_LENGTH; i++) {
     header_node_t* new_header = (header_node_t*) malloc(sizeof(header_node_t));
-    
+
     // error check 
     if (new_header == NULL) {
       perror("Failed to malloc header");
@@ -30,6 +30,7 @@ void hash_table_initialize(hash_table_t* ht) {
     table[i] = new_header;
   }
   ht->table = table; 
+  ht->index_list = NULL;
 }
 
 /* 
@@ -40,7 +41,7 @@ frequency incremented
 void hash_table_add(hash_table_t* ht, graph_node_t* graph_node) {  
   //malloc for new node to add 
   hash_node_t* new_node = (hash_node_t*) malloc(sizeof(hash_node_t));
-  
+
   //error check, add node to graph 
   if (NULL != new_node) {
     new_node->graph_node = graph_node;
@@ -49,6 +50,10 @@ void hash_table_add(hash_table_t* ht, graph_node_t* graph_node) {
     //get hash value and associated header 
     unsigned long index = hash_function(graph_node->val);
     header_node_t* current = ht->table[index];
+
+    // if this bucket is empty, add its index into the index_table
+    if (current == NULL)
+      index_list_append(ht, index);
 
     //lock current header
     pthread_mutex_t m = current->m;
@@ -71,7 +76,7 @@ pre: hash is initialized
 post: if word was in hash, it has been removed. Otherwise, nothing changes
 */
 void hash_table_delete_entry(hash_table_t* ht, graph_node_t* graph_node) {
-  
+
   // get hash value and associated header 
   unsigned long index = hash_function(graph_node->val);
   header_node_t* current_header = ht->table[index];
@@ -94,7 +99,7 @@ void hash_table_delete_entry(hash_table_t* ht, graph_node_t* graph_node) {
     previous = current;
     current = current->next;
   } // end while 
-  
+
   pthread_mutex_unlock(&(current_header->m));//unlock header 
 }
 
@@ -109,7 +114,7 @@ graph_node_t* hash_table_search(hash_table_t* ht, char type, const char* val) {
 
   // node to search for 
   graph_node_t* search_node = add_node(type, val);
-  
+
   // lock current header 
   pthread_mutex_t m = header->m;
   pthread_mutex_lock(&m);
@@ -117,9 +122,9 @@ graph_node_t* hash_table_search(hash_table_t* ht, char type, const char* val) {
 
   // loop through until find search_node 
   while (node != NULL && !_compare_node(search_node, node->graph_node)) {
-  	node = node->next;
+    node = node->next;
   }// end while 
-  
+
   free(search_node);
   pthread_mutex_unlock(&m);  // unlock header 
 
@@ -132,8 +137,8 @@ void hash_table_set_flags(hash_table_t* ht, int n) {
   for (int i = 0; i < MAX_ARR_LENGTH; i++) {
     current = ht->table[i]->hash_node;
     while (current != NULL) {
-        current->graph_node->flag = n;
-        current = current->next;
+      current->graph_node->flag = n;
+      current = current->next;
     }// end while
   }// end for 
 }
@@ -198,7 +203,7 @@ void* bfs_pthread_fn(void* args) {
 
   while (!queue_empty(nq)) {
     queue_node_t* subtree_queue_node = queue_pop(nq);
-    
+
     // ensure that we are still within our original designated neighborhood
     int graph_dist = subtree_queue_node->dist;
     if (graph_dist > dist) continue;
@@ -220,4 +225,32 @@ void* bfs_pthread_fn(void* args) {
   }
 
   return NULL;
+}
+
+list_node_t* get_nodes(hash_table_t *ht) {
+  list_node_t* ret;
+  index_node_t* ind_node = ht->index_list;
+  while (NULL != ind_node) {
+    int ind = ind_node->ind;
+    hash_node_t* h_node = ht->table[ind]->hash_node;
+    while (NULL != h_node) {
+      list_node_append(ret, h_node->graph_node);
+      h_node = h_node->next;
+    }
+    ind_node = ind_node->next;
+  }
+  return ret;
+}
+
+// assumes that the ind is not already confirmed to not be in ht
+void index_list_append(hash_table_t *ht, int ind) {
+  // create new node
+  index_node_t *new_node;
+  if ((new_node = malloc(sizeof(index_node_t))) == NULL) {
+    fprintf(stderr, "Error allocating space for new_node\n");
+    exit(EXIT_FAILURE);
+  }
+  new_node->ind = ind;
+  new_node->next = ht->index_list;
+  ht->index_list = new_node;
 }

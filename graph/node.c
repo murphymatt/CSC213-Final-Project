@@ -44,6 +44,16 @@ void add_node_neighbor(graph_node_t* node1, graph_node_t* node2) {
   pthread_mutex_unlock(&node2->m);
 }
 
+void list_node_append(list_node_t* list, graph_node_t* node) {
+  list_node_t* new_node;
+  if ((new_node = malloc(sizeof(list_node_t))) == NULL) {
+    fprintf(stderr, "list_node_append: Error allocating space for list node\n");
+    exit(EXIT_FAILURE);
+  }
+  new_node->graph_node = node;
+  new_node->next = list;
+  list = new_node;
+}
 
 void graph_delete(graph_node_t* sad_node) {
   pthread_mutex_lock(&sad_node->m);
@@ -51,7 +61,7 @@ void graph_delete(graph_node_t* sad_node) {
     pthread_mutex_unlock(&sad_node->m);
     return;
   }
-  
+
   list_node_t* current = sad_node->neighbors;
 
   // Free all list nodes pointing to sad_node
@@ -87,3 +97,4 @@ void graph_delete(graph_node_t* sad_node) {
   pthread_mutex_unlock(&sad_node->m);
   free(sad_node);
 }
+
