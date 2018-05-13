@@ -7,9 +7,9 @@ first line:  Type, Value; Type2, Value2; etc
 subsequent: Type, Value; Type2, Value2; Type3, Value3 where Value has an edge with Value2, and Value3
 
 
-******Example Start**********************
+Example Start: 
 
-******Example End************************
+Example End: 
 
 
 
