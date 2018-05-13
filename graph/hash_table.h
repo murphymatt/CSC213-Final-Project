@@ -5,7 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <pthread.h>
+
 #include "node.h"
+#include "queue.h"
 
 #define MAX_ARR_LENGTH 256
 
@@ -13,8 +16,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <pthread.h>
 
 typedef struct hash_node {
   graph_node_t* graph_node;
@@ -31,6 +32,13 @@ typedef struct hash_table {
   header_node_t** table;
 } hash_table_t;
 
+
+typedef struct bfs_pthread_args {
+  queue_t* node_queue;
+  hash_table_t* ret_table;
+  int dist;
+} bfs_pthread_args_t;
+
 // initializes a hash table
 void hash_table_initialize(hash_table_t* ht);
 
@@ -43,9 +51,11 @@ graph_node_t* hash_table_search(hash_table_t* ht, char type, const char* val);
 
 hash_table_t* bfs(graph_node_t* start, int dist, int num_threads);
 
+void* bfs_pthread_fn(void* args);
+
 void hash_table_set_flags(hash_table_t* ht, int n);
 
-void _bfs_helper(hash_table_t* ret_table, graph_node_t* start, int dist);
+void set_flags(hash_table_t* ht, int n);
 
 unsigned long hash_function(const char* word);
 

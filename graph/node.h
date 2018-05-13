@@ -31,7 +31,7 @@ bool _compare_node(graph_node_t* node1, graph_node_t* node2);
 void add_node_neighbor(graph_node_t* node1, graph_node_t* node2);
 
 void graph_delete(graph_node_t* sad_node);
-//
+
 // This makes the header file work for both C and C++
 #ifdef __cplusplus
 }
