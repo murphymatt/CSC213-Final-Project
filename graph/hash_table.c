@@ -205,7 +205,7 @@ void* bfs_pthread_fn(void* args) {
 
     // ensure that we are still within our original designated neighborhood
     int graph_dist = subtree_queue_node->dist;
-    if (graph_dist > dist) continue;
+    if (graph_dist >= dist) continue;
 
     // take our root and iterate over neighbors
     graph_node_t* subtree_root = subtree_queue_node->g_node;
