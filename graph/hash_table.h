@@ -55,6 +55,7 @@ void hash_table_delete_entry(hash_table_t* ht, graph_node_t* graph_node);
 graph_node_t* hash_table_search(hash_table_t* ht, char type, const char* val);
 hash_table_t* bfs(graph_node_t* start, int dist, int num_threads);
 list_node_t* get_nodes(hash_table_t *ht);
+list_node_t* node_intersection(list_node_t* lst1, list_node_t* lst2);
 
 // thread functions
 void* bfs_pthread_fn(void* args);

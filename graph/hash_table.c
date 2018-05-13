@@ -241,6 +241,25 @@ list_node_t* get_nodes(hash_table_t *ht) {
   return ret;
 }
 
+list_node_t* node_intersection(list_node_t* lst1, list_node_t *lst2) {
+  list_node_t* ret = NULL;
+  list_node_t* cur1 = lst1;
+  while (cur1 != NULL) {
+    graph_node_t *cur1_gnode = cur1->graph_node;
+    list_node_t* cur2 = lst2;
+    while (cur2 != NULL) {
+      // we have found cur1 node in the other graph, add it to the ret list
+      if (_compare_node(cur1_gnode, cur2->graph_node)) {
+        ret = list_node_append(ret, cur1_gnode);
+        break;
+      }
+      cur2 = cur2->next;
+    }
+    cur1 = cur1->next;
+  }
+  return ret;
+}
+
 // assumes that the ind is not already confirmed to not be in ht
 void index_list_append(hash_table_t *ht, int ind) {
   // create new node
