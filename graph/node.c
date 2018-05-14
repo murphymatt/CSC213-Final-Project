@@ -3,7 +3,7 @@
 
 #include "node.h"
 
-graph_node_t* add_node(char type, const char* val) {
+graph_node_t* graph_add(char type, const char* val) {
   graph_node_t* new_node = (graph_node_t*) malloc(sizeof(graph_node_t));
   char* malloc_val =  (char*) malloc(sizeof(char) * MAX_STR);
   if (new_node != NULL && malloc_val != NULL) {

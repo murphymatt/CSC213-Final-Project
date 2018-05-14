@@ -108,7 +108,7 @@ graph_node_t* hash_table_search(hash_table_t* ht, char type, const char* val) {
   header_node_t* header = ht->table[index];
 
   //node to search for 
-  graph_node_t* search_node = add_node(type, val);
+  graph_node_t* search_node = graph_add(type, val);
   
   //lock current header 
   pthread_mutex_t m = header->m;
@@ -138,6 +138,7 @@ void hash_table_set_flags(hash_table_t* ht, int n) {
   }//end for 
 }
 
+// http://www.cse.yorku.ca/~oz/hash.html
 unsigned long hash_function(const char* word) {
   unsigned long hash = 5381;
   int i;

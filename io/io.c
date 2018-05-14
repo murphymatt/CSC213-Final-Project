@@ -62,7 +62,7 @@ hash_table_t* read_from_file(const char *file_path) {
         if (ret == '\n')
             break;
         printf("%c, %s\n", type, name);
-        graph_node_t* new_node = add_node(type, name);
+        graph_node_t* new_node = graph_add(type, name);
         hash_table_add(ht, new_node);
         // get rid of the next space
         char nothing = fgetc(fp);
@@ -162,7 +162,7 @@ void get_user_input(hash_table_t* ht) {
       printf("Enter the student name:");
       scanf("%s", student_name);
 
-      new_student = add_node('S', student_name);
+      new_student = graph_add('S', student_name);
       while(!done) {
         printf("Add classes (q when done): ");
         scanf("%s", class_name);
@@ -171,7 +171,7 @@ void get_user_input(hash_table_t* ht) {
           char nothing = getchar();
           continue;
         }//end if
-        new_class = add_node('C', class_name);
+        new_class = graph_add('C', class_name);
         add_node_neighbor(new_student, new_class); 
       }//end while
                   

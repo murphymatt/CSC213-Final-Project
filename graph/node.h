@@ -24,7 +24,7 @@ typedef struct graph_node {
   pthread_mutex_t m;
 } graph_node_t;
 
-graph_node_t* add_node(char type, const char* val);
+graph_node_t* graph_add(char type, const char* val);
 
 bool _compare_node(graph_node_t* node1, graph_node_t* node2);
 

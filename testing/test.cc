@@ -11,16 +11,16 @@ TEST(GraphTest, NodeAddTest) {
 	// graph_node_t* class_arr[10] = { NULL };
 
 	// the people we like
-	graph_node_t* maddie = add_node('S', "Maddie Goldman");
-	graph_node_t* henry = add_node('S', "Henry Fisher");
-	graph_node_t* matt = add_node('S', "Matt Murphy");
-	graph_node_t* myles = add_node('S', "Myles Becker");
-	graph_node_t* cameron = add_node('S', "Cameron Chen");
-	graph_node_t* sooji = add_node('S', "Sooji Son");
-	graph_node_t* abyaya = add_node('S', "Abyaya Lamsal");
-	graph_node_t* joshua = add_node('S', "Joshua Ekirikubinza");
-	graph_node_t* cara = add_node('S', "Cara Bresnahan");
-	graph_node_t* tapiwa = add_node('S', "Tapiwa Zvidzwa");
+	graph_node_t* maddie = graph_add('S', "Maddie Goldman");
+	graph_node_t* henry = graph_add('S', "Henry Fisher");
+	graph_node_t* matt = graph_add('S', "Matt Murphy");
+	graph_node_t* myles = graph_add('S', "Myles Becker");
+	graph_node_t* cameron = graph_add('S', "Cameron Chen");
+	graph_node_t* sooji = graph_add('S', "Sooji Son");
+	graph_node_t* abyaya = graph_add('S', "Abyaya Lamsal");
+	graph_node_t* joshua = graph_add('S', "Joshua Ekirikubinza");
+	graph_node_t* cara = graph_add('S', "Cara Bresnahan");
+	graph_node_t* tapiwa = graph_add('S', "Tapiwa Zvidzwa");
 
 	people_arr[0] = maddie;
 	people_arr[1] = henry;
@@ -33,10 +33,10 @@ TEST(GraphTest, NodeAddTest) {
 	people_arr[8] = cara;
 	people_arr[9] = tapiwa;
 
-	graph_node_t* csc213 = add_node('C', "CSC213");
-	graph_node_t* csc261 = add_node('C', "CSC261");
-	graph_node_t* mus116 = add_node('C', "MUS116");
-	graph_node_t* csc301 = add_node('C', "CSC301");
+	graph_node_t* csc213 = graph_add('C', "CSC213");
+	graph_node_t* csc261 = graph_add('C', "CSC261");
+	graph_node_t* mus116 = graph_add('C', "MUS116");
+	graph_node_t* csc301 = graph_add('C', "CSC301");
 
 
 	for (int i = 0; i < ARR_LEN; ++i)		
@@ -91,17 +91,17 @@ TEST(GraphTest, NodeAddTest) {
 
 TEST(GraphTest, NodeDeleteTest) {
 		// the people we like
-	graph_node_t* maddie = add_node('S', "Maddie Goldman");
-	graph_node_t* henry = add_node('S', "Henry Fisher");
-	graph_node_t* myles = add_node('S', "Myles Becker");
-	graph_node_t* cameron = add_node('S', "Cameron Chen");
-	graph_node_t* abyaya = add_node('S', "Abyaya Lamsal");
+	graph_node_t* maddie = graph_add('S', "Maddie Goldman");
+	graph_node_t* henry = graph_add('S', "Henry Fisher");
+	graph_node_t* myles = graph_add('S', "Myles Becker");
+	graph_node_t* cameron = graph_add('S', "Cameron Chen");
+	graph_node_t* abyaya = graph_add('S', "Abyaya Lamsal");
 
 	//classes we have in common
-	graph_node_t* csc213 = add_node('C', "CSC213");
-	graph_node_t* csc261 = add_node('C', "CSC261");
-	graph_node_t* mus116 = add_node('C', "MUS116");
-	graph_node_t* csc301 = add_node('C', "CSC301");
+	graph_node_t* csc213 = graph_add('C', "CSC213");
+	graph_node_t* csc261 = graph_add('C', "CSC261");
+	graph_node_t* mus116 = graph_add('C', "MUS116");
+	graph_node_t* csc301 = graph_add('C', "CSC301");
 
 	
 	add_node_neighbor(henry, csc213);
@@ -155,9 +155,9 @@ TEST(GraphTest, HashBasicAddTest) {
 	hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
 	hash_table_initialize(ht);
 
-	graph_node_t* maddie = add_node('S', "Maddie Goldman");
-	graph_node_t* henry = add_node('S', "Henry Fisher");
-	graph_node_t* matt = add_node('S', "Matt Murphy");
+	graph_node_t* maddie = graph_add('S', "Maddie Goldman");
+	graph_node_t* henry = graph_add('S', "Henry Fisher");
+	graph_node_t* matt = graph_add('S', "Matt Murphy");
 
 	hash_table_add(ht, maddie);
 	hash_table_add(ht, henry);
@@ -177,16 +177,16 @@ TEST(GraphTest, BFSTest) {
 	// graph_node_t* class_arr[10] = { NULL };
 
 	// the people we like
-	graph_node_t* maddie = add_node('S', "Maddie Goldman");
-	graph_node_t* henry = add_node('S', "Henry Fisher");
-	graph_node_t* matt = add_node('S', "Matt Murphy");
-	graph_node_t* myles = add_node('S', "Myles Becker");
-	graph_node_t* cameron = add_node('S', "Cameron Chen");
-	graph_node_t* sooji = add_node('S', "Sooji Son");
-	graph_node_t* abyaya = add_node('S', "Abyaya Lamsal");
-	graph_node_t* joshua = add_node('S', "Joshua Ekirikubinza");
-	graph_node_t* cara = add_node('S', "Cara Bresnahan");
-	graph_node_t* tapiwa = add_node('S', "Tapiwa Zvidzwa");
+	graph_node_t* maddie = graph_add('S', "Maddie Goldman");
+	graph_node_t* henry = graph_add('S', "Henry Fisher");
+	graph_node_t* matt = graph_add('S', "Matt Murphy");
+	graph_node_t* myles = graph_add('S', "Myles Becker");
+	graph_node_t* cameron = graph_add('S', "Cameron Chen");
+	graph_node_t* sooji = graph_add('S', "Sooji Son");
+	graph_node_t* abyaya = graph_add('S', "Abyaya Lamsal");
+	graph_node_t* joshua = graph_add('S', "Joshua Ekirikubinza");
+	graph_node_t* cara = graph_add('S', "Cara Bresnahan");
+	graph_node_t* tapiwa = graph_add('S', "Tapiwa Zvidzwa");
 
 	people_arr[0] = maddie;
 	people_arr[1] = henry;
@@ -199,10 +199,10 @@ TEST(GraphTest, BFSTest) {
 	people_arr[8] = cara;
 	people_arr[9] = tapiwa;
 
-	graph_node_t* csc213 = add_node('C', "CSC213");
-	graph_node_t* csc261 = add_node('C', "CSC261");
-	graph_node_t* mus116 = add_node('C', "MUS116");
-	graph_node_t* csc301 = add_node('C', "CSC301");
+	graph_node_t* csc213 = graph_add('C', "CSC213");
+	graph_node_t* csc261 = graph_add('C', "CSC261");
+	graph_node_t* mus116 = graph_add('C', "MUS116");
+	graph_node_t* csc301 = graph_add('C', "CSC301");
 
 
 	for (int i = 0; i < ARR_LEN; ++i)		
@@ -259,8 +259,8 @@ TEST(GraphTest, HashAddCollisionTest) {
 	hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
 	hash_table_initialize(ht);
 
-	graph_node_t* maddie = add_node('S', "Maddie Goldman");
-	graph_node_t* maddie2 = add_node('C', "Maddie Goldman");
+	graph_node_t* maddie = graph_add('S', "Maddie Goldman");
+	graph_node_t* maddie2 = graph_add('C', "Maddie Goldman");
 
 	ASSERT_NE(maddie, maddie2);
 
@@ -278,8 +278,8 @@ TEST(GraphTest, HashDeleteTest) {
 	hash_table_t* ht = (hash_table_t*) malloc(sizeof(hash_table_t));
 	hash_table_initialize(ht);
 
-	graph_node_t* maddie = add_node('S', "Maddie Goldman");
-	graph_node_t* maddie2 = add_node('C', "Maddie Goldman");
+	graph_node_t* maddie = graph_add('S', "Maddie Goldman");
+	graph_node_t* maddie2 = graph_add('C', "Maddie Goldman");
 
 	hash_table_add(ht, maddie);
 	hash_table_add(ht, maddie2);
