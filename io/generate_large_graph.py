@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, sample
 from functools import reduce
 
 N_CLASSES = 200
@@ -6,7 +6,7 @@ N_STUDENTS = 1000
 
 def choose_classes(classes):
     num_classes = randint(3,6)
-    inds = [randint(0,N_CLASSES-1) for i in range(num_classes)]
+    inds = sample(range(N_CLASSES), num_classes)
     return [classes[ind] for ind in inds]
 
 def classes_str(classes):
