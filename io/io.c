@@ -127,6 +127,13 @@ int get_next_name(FILE* fp, char name[MAX_STR], char* c) {
 
 int main() {
 
+    //read hash table contents from existing file
+    hash_table_t* ht = read_from_file("file_name.txt"); 
+
+    //user can add to the hash table
+    get_user_input(ht);
+    write_to_file(ht, "/output.txt");
+
 
     return 0;
 
