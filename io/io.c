@@ -125,6 +125,13 @@ int get_next_name(FILE* fp, char name[MAX_STR], char* c) {
 
 int main() {
 
+    //read hash table contents from existing file
+    hash_table_t* ht = read_from_file("file_name.txt"); 
+
+    //user can add to the hash table
+    get_user_input(ht);
+    write_to_file(ht, "/output.txt");
+
 
     return 0;
 
@@ -222,9 +229,9 @@ void get_user_input(hash_table_t* ht) {
       break;
     
     case 'E': 
-        printf("Enter class to delete:"); 
-        scanf("%s", class_name); 
-        sad_node = hash_table_search(ht, 'C', class_name); 
+        printf("Enter class to delete:");
+        scanf("%s", class_name);
+        sad_node = hash_table_search(ht, 'C', class_name);
 
         //error check 
         if(sad_node == NULL) {
@@ -232,8 +239,8 @@ void get_user_input(hash_table_t* ht) {
             break;
         }
 
-        graph_delete(sad_node); 
-        move = getchar(); 
+        graph_delete(sad_node);
+        move = getchar();
         break; 
 
 
