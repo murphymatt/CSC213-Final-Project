@@ -62,7 +62,7 @@ hash_table_t* read_from_file(const char *file_path) {
         if (ret == '\n')
             break;
         printf("%c, %s\n", type, name);
-        graph_node_t* new_node = add_node(type, name);
+        graph_node_t* new_node = graph_add(type, name);
         hash_table_add(ht, new_node);
         // get rid of the next space
         char nothing = fgetc(fp);
@@ -151,7 +151,10 @@ void get_user_input(hash_table_t* ht) {
     printf("C......Add a class\n"); 
     printf("D......Delete a student node\n"); 
     printf("E......Delete a class node\n"); 
-    printf("G......Get neighbors\n"); 
+    printf("K......List classes for a student\n"); 
+    printf("L......List students in a class\n");
+    printf("A......See classes in common between two students\n");
+    printf("B......See students in common between two classes\n");
     printf("Q......quit\n"); 
     // add more
 
@@ -165,7 +168,7 @@ void get_user_input(hash_table_t* ht) {
       printf("Enter the student name:");
       scanf("%s", student_name);
 
-      new_student = add_node('S', student_name);
+      new_student = graph_add('S', student_name);
       while(!done) {
         printf("Add classes (q when done):");
         scanf("%s", class_name);
@@ -174,7 +177,7 @@ void get_user_input(hash_table_t* ht) {
           move = getchar();
           continue;
         }//end if
-        new_class = add_node('C', class_name);
+        new_class = graph_add('C', class_name);
         add_node_neighbor(new_student, new_class); 
       }//end while
                   
@@ -182,10 +185,38 @@ void get_user_input(hash_table_t* ht) {
       break; 
       //continue; 
 
+    case 'C': 
+        printf("Enter the class name:");
+        scanf("%s", class_name);
+
+        new_class = graph_add('C', class_name);
+        while(!done) {
+            printf("Add students (q when done):");
+            scanf("%s", student_name);
+            if(strcmp(student_name, "q") == 0) {
+                done = 1;
+                move=getchar();
+                continue;
+            }//end if
+            new_student = graph_add('S', student_name);
+            add_node_neighbor(new_class, new_student); 
+        }//end while
+
+        hash_table_add(ht, new_class);
+        break; 
+
     case 'D':
       printf("Enter name to delete:");
       scanf("%s", student_name);
       sad_node = hash_table_search(ht, 'S', student_name);
+
+      //error check
+      if(sad_node == NULL) {
+        printf("%s doesn't exist in the graph\n", student_name);
+        break;
+      }
+      
+
       graph_delete(sad_node); 
       move = getchar(); 
       break;
@@ -194,16 +225,17 @@ void get_user_input(hash_table_t* ht) {
         printf("Enter class to delete:"); 
         scanf("%s", class_name); 
         sad_node = hash_table_search(ht, 'C', class_name); 
+
+        //error check 
+        if(sad_node == NULL) {
+            printf("%s doesn't exist in the graph\n", class_name);
+            break;
+        }
+
         graph_delete(sad_node); 
         move = getchar(); 
         break; 
 
-    case 'G': 
-        printf("Enter a type and value to delete:"); 
-        printf("Type"); 
-        scanf("")
-        scanf("%s", class_name); 
-        search_node = 
 
     case 'Q':
       printf("Bye!\n");
@@ -211,7 +243,6 @@ void get_user_input(hash_table_t* ht) {
       break;
       
     }//end switch
- 
 
   }//end while
 }
