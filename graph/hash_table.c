@@ -226,6 +226,25 @@ void* bfs_pthread_fn(void* args) {
   return NULL;
 }
 
+hash_table_t* hash_table_intersection(hash_table_t *ht1, hash_table_t *ht2) {
+  list_node_t* node_intersect = node_intersection(get_nodes(ht1), get_nodes(ht2));
+  list_node_t* cur = node_intersect;
+  hash_table_t* ret_table = NULL;
+  while (cur != NULL) {
+    // we want to return null by default, initialize if need be
+    if (ret_table == NULL) {
+      if ((ret_table = malloc(sizeof(hash_table_t))) == NULL) {
+        fprintf(stderr, "Error allocating space for return hash table\n");
+        exit(EXIT_FAILURE);
+      }
+      hash_table_initialize(ret_table);
+    }
+    hash_table_add(ret_table, cur->graph_node);
+    cur = cur->next;
+  }
+  return ret_table;
+}
+
 list_node_t* get_nodes(hash_table_t *ht) {
   list_node_t* ret = NULL;
   index_node_t* ind_node = ht->index_list;

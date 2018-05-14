@@ -239,23 +239,17 @@ TEST(GraphTest, BFSTest) {
   hash_table_add(&ht, mus116);
   hash_table_add(&ht, csc301);
 
-  /* 
-  list_node_t* get_nodes_ret = get_nodes(&ht);
-  while (NULL != get_nodes_ret) {
-    graph_node_t * g_node = get_nodes_ret->graph_node;
-    if (g_node != NULL)
-      fprintf(stderr, "%s ", g_node->val);
-    get_nodes_ret = get_nodes_ret->next;
-  }
-  */
-
   int num_threads = 4;
   hash_table_t *bfs_table = bfs(csc261, 1, num_threads);
   // ensure resulting neighbors are within returned hash table
-  graph_node_t* new_maddie  = hash_table_search(bfs_table, 'S', "Maddie Goldman");
-  graph_node_t* new_cameron = hash_table_search(bfs_table, 'S', "Cameron Chen");
-  graph_node_t* new_abyaya  = hash_table_search(bfs_table, 'S', "Abyaya Lamsal");
-  graph_node_t* new_cara    = hash_table_search(bfs_table, 'S', "Cara Bresnahan");
+  graph_node_t* new_maddie = 
+    hash_table_search(bfs_table, 'S', "Maddie Goldman");
+  graph_node_t* new_cameron = 
+    hash_table_search(bfs_table, 'S', "Cameron Chen");
+  graph_node_t* new_abyaya = 
+    hash_table_search(bfs_table, 'S', "Abyaya Lamsal");
+  graph_node_t* new_cara = 
+    hash_table_search(bfs_table, 'S', "Cara Bresnahan");
   ASSERT_EQ(new_maddie,  maddie);
   ASSERT_EQ(new_cameron, cameron);
   ASSERT_EQ(new_abyaya,  abyaya);
@@ -266,11 +260,18 @@ TEST(GraphTest, BFSTest) {
   ASSERT_TRUE(no_matt == NULL);
 
   // return common courses of two students
+  /*
   list_node_t* matt_classes = get_nodes(bfs(matt, 1, 4));
   list_node_t* henry_classes = get_nodes(bfs(henry, 1, 4));
   list_node_t* matt_henry_int = node_intersection(matt_classes, henry_classes);
   list_node_t* cur = matt_henry_int;
   ASSERT_TRUE(list_node_contains(matt_henry_int, csc213->type, csc213->val));
+  */
+
+  hash_table_t* matt_henry_int = 
+    hash_table_intersection(bfs(matt, 1, 4), bfs(henry, 1, 4));
+  graph_node_t* new_csc213 = hash_table_search(matt_henry_int, 'C', "CSC213");
+  ASSERT_TRUE(new_csc213 != NULL);
 }
 
 TEST(GraphTest, HashAddCollisionTest) {

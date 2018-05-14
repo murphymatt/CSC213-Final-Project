@@ -54,6 +54,9 @@ void hash_table_delete_entry(hash_table_t* ht, graph_node_t* graph_node);
 // hash_table_search returns a single node, bfs, returns a node neighborhood
 graph_node_t* hash_table_search(hash_table_t* ht, char type, const char* val);
 hash_table_t* bfs(graph_node_t* start, int dist, int num_threads);
+hash_table_t* hash_table_intersection(hash_table_t* ht1, hash_table_t* ht2);
+
+// list node functions
 list_node_t* get_nodes(hash_table_t *ht);
 list_node_t* node_intersection(list_node_t* lst1, list_node_t* lst2);
 
