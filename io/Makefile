@@ -8,3 +8,4 @@ include $(ROOT)/common.mk
 
 io:: main
 	./main
+
