@@ -45,7 +45,6 @@ void hash_table_add(hash_table_t* ht, graph_node_t* graph_node) {
   //error check, add node to graph 
   if (NULL != new_node) {
     new_node->graph_node = graph_node;
-    new_node->m = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 
     //get hash value and associated header 
     unsigned long index = hash_function(graph_node->val);

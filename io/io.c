@@ -151,7 +151,10 @@ void get_user_input(hash_table_t* ht) {
     printf("C......Add a class\n"); 
     printf("D......Delete a student node\n"); 
     printf("E......Delete a class node\n"); 
-    printf("G......Get neighbors\n"); 
+    printf("K......List classes for a student\n"); 
+    printf("L......List students in a class\n");
+    printf("A......See classes in common between two students\n");
+    printf("B......See students in common between two classes\n");
     printf("Q......quit\n"); 
     // add more
 
