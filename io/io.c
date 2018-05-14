@@ -1,5 +1,7 @@
 #include "io.h"
 
+#define THREADS 4
+
 /*
  * out_file is a E+1 line file where E is edges in graph
  * first line:  Type, Value; Type2, Value2; etc
@@ -141,6 +143,8 @@ void get_user_input(hash_table_t* ht) {
   graph_node_t* new_class;
   graph_node_t* sad_node; 
   graph_node_t* search_node; 
+  list_node_t* current;
+  hash_table_t* intersection;
   char move; 
   int done = 0;
   int exit = 0; 
@@ -165,12 +169,12 @@ void get_user_input(hash_table_t* ht) {
 
     switch(action) {
     case 'S':
-      printf("Enter the student name:");
+      printf("Enter the student name: ");
       scanf("%s", student_name);
 
       new_student = graph_add('S', student_name);
       while(!done) {
-        printf("Add classes (q when done):");
+        printf("Add classes (q when done): ");
         scanf("%s", class_name);
         if(strcmp(class_name, "q") == 0) {
           done = 1;
@@ -186,7 +190,7 @@ void get_user_input(hash_table_t* ht) {
       //continue; 
 
     case 'D':
-      printf("Enter name to delete:");
+      printf("Enter name to delete: ");
       scanf("%s", student_name);
       sad_node = hash_table_search(ht, 'S', student_name);
       graph_delete(sad_node); 
@@ -194,19 +198,98 @@ void get_user_input(hash_table_t* ht) {
       break;
     
     case 'E': 
-        printf("Enter class to delete:"); 
-        scanf("%s", class_name); 
-        sad_node = hash_table_search(ht, 'C', class_name); 
-        graph_delete(sad_node); 
-        move = getchar(); 
-        break; 
+      printf("Enter class to delete: "); 
+      scanf("%s", class_name); 
+      sad_node = hash_table_search(ht, 'C', class_name); 
+      graph_delete(sad_node); 
+      move = getchar(); 
+      break; 
 
-    case 'G': 
-        printf("Enter a type and value to delete:"); 
-        printf("Type"); 
-        scanf("")
-        scanf("%s", class_name); 
-        search_node = 
+    case 'K':
+      printf("Enter student name: ");
+      scanf("%s", student_name); 
+      graph_node_t* student = hash_table_search(ht, 'S', student_name);
+      if (student == NULL) {
+        printf("That student doesn't exist\n");
+        break;
+      }
+      current = student->neighbors;
+      while(current != NULL) {
+        printf("%s\n", current->graph_node->val);
+        current = current->next;
+      }
+      break;
+
+    case 'L':
+      printf("Enter class name: ");
+      scanf("%s", class_name); 
+      graph_node_t* class = hash_table_search(ht, 'C', class_name);
+      if (class == NULL) {
+        printf("That class doesn't exist\n");
+        break;
+      }
+      current = class->neighbors;
+      while(current != NULL) {
+        printf("%s\n", current->graph_node->val);
+        current = current->next;
+      }
+      break;
+
+    case 'A':
+      printf("Enter first student name: ");
+      char student1_str[MAX_STR];
+      scanf("%s", student1_str);
+      printf("Enter second student name: ");
+      char student2_str[MAX_STR];
+      scanf("%s", student2_str);
+
+      graph_node_t* student1 = hash_table_search(ht, 'S', student1_str);
+      if (student1 == NULL) {
+        printf("That student doesn't exist\n");
+        break;
+      }
+
+      graph_node_t* student2 = hash_table_search(ht, 'S', student2_str);
+      if (student2 == NULL) {
+        printf("That student doesn't exist\n");
+        break;
+      }
+
+      intersection = 
+        hash_table_intersection(bfs(student1, 1, THREADS), bfs(student2, 1, THREADS));
+      current = get_nodes(intersection);
+      while (current != NULL) {
+        printf("%s\n", current->graph_node->val);
+      }
+      break;
+
+    case 'B':
+      printf("Enter first class name: ");
+      char class1_str[MAX_STR];
+      scanf("%s", class1_str);
+      printf("Enter second class name: ");
+      char class2_str[MAX_STR];
+      scanf("%s", class2_str);
+
+      graph_node_t* class1 = hash_table_search(ht, 'C', class1_str);
+      if (class1 == NULL) {
+        printf("That class doesn't exist\n");
+        break;
+      }
+
+      graph_node_t* class2 = hash_table_search(ht, 'C', class2_str);
+      if (class2 == NULL) {
+        printf("That class doesn't exist\n");
+        break;
+      }
+
+      intersection = 
+        hash_table_intersection(bfs(class1, 1, THREADS), bfs(class2, 1, THREADS));
+      current = get_nodes(intersection);
+      while (current != NULL) {
+        printf("%s\n", current->graph_node->val);
+      }
+      break;
 
     case 'Q':
       printf("Bye!\n");
