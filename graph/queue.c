@@ -35,8 +35,11 @@ void queue_push(queue_t* queue, graph_node_t* node, int dist) {
 }
 
 queue_node_t* queue_pop(queue_t* queue) {
-  if (queue_empty(queue)) return NULL;
   pthread_mutex_lock(&queue->m);
+  if (queue_empty(queue)) {
+    pthread_mutex_unlock(&queue->m);
+    return NULL;
+  }
   queue_node_t* ret_node = queue->front;
   queue->front = ret_node->next;
   queue->size--;
