@@ -125,7 +125,7 @@ int get_next_name(FILE* fp, char name[MAX_STR], char* c) {
 }
 
 int main() {
-    char* file_path = "large_graph.txt";
+    char* file_path = "file.txt";
     // read hash table contents from existing file
     hash_table_t* ht = read_from_file(file_path); 
 
