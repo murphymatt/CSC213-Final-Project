@@ -1,6 +1,8 @@
-C, CSC213; S, Matt Murphy; S, Maddie Goldman; C, CSC321; S, Henry Fisher; 
-C, CSC213; S, Matt Murphy; S, Henry Fisher; S, Maddie Goldman; 
+C, CSC213; S, Matt Murphy; S, Maddie Goldman; S, Maddie Goldman; C, csc213; C, CSC321; S, Henry Fisher; 
+C, CSC213; S, Maddie Goldman; S, Henry Fisher; S, Matt Murphy; 
 S, Matt Murphy; C, CSC321; 
+S, Maddie Goldman; C, csc213; 
 S, Maddie Goldman; 
+C, csc213; 
 C, CSC321; S, Henry Fisher; 
 S, Henry Fisher; 

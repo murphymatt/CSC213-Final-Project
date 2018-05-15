@@ -8,7 +8,6 @@
 #include "node.h"
 #include "hash_table.h"
 
-#define MAX_NAME 30
 
 void write_to_file(hash_table_t *h_table, const char *file_path);
 
