@@ -202,6 +202,7 @@ void* bfs_pthread_fn(void* args) {
 
   while (!queue_empty(nq)) {
     queue_node_t* subtree_queue_node = queue_pop(nq);
+    if (subtree_queue_node == NULL) continue;
 
     // ensure that we are still within our original designated neighborhood
     int graph_dist = subtree_queue_node->dist;

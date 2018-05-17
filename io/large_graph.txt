@@ -1,9 +1,0 @@
-C, ECN338; C, CSC213; S, Cameron Chen; C, MUS116; S, Myles Becker; S, Maddie Goldman; S, Henry Fisher; C, CSC261; 
-C, ECN338; S, Henry Fisher; 
-C, CSC213; S, Cameron Chen; S, Myles Becker; S, Maddie Goldman; S, Henry Fisher; 
-S, Cameron Chen; C, CSC261; 
-C, MUS116; S, Myles Becker; S, Henry Fisher; 
-S, Myles Becker; 
-S, Maddie Goldman; C, CSC261; 
-S, Henry Fisher; 
-C, CSC261; 
