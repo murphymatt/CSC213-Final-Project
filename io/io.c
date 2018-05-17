@@ -58,6 +58,8 @@ hash_table_t* read_from_file(const char *file_path) {
         exit(2);
     }
 
+    int empty = 0;
+
     // adding members
     while (true) {
         char type;
@@ -65,6 +67,10 @@ hash_table_t* read_from_file(const char *file_path) {
         int ret = get_next_name(fp, name, &type);
         if (ret == '\n')
             break;
+        else if (ret == EOF) {
+          empty = 1;
+          break;
+        }
         graph_node_t* new_node = graph_add(type, name);
         hash_table_add(ht, new_node);
         // get rid of the next space
@@ -72,7 +78,7 @@ hash_table_t* read_from_file(const char *file_path) {
     }
 
     // adding relationships
-    while (true) {
+    while (true || !empty) {
         // get name/type of node1
         char node1_type;
         char node1_name[MAX_STR];
